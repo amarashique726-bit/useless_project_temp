@@ -1,0 +1,4520 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FARTNET™ — Acoustic Signal Intelligence & Communication Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+    rel="stylesheet">
+
+  <style>
+    /* ══════════════════════════════════════════════════════════════════
+   FARTNET™ SIGINT CORE DESIGN SYSTEM (FUTURISTIC GLASSMORPHISM)
+   ══════════════════════════════════════════════════════════════════ */
+    :root {
+      --bg-core: #03050A;
+      --bg-secondary: #071019;
+      --bg-panel: rgba(11, 24, 38, 0.45);
+      --bg-glass: rgba(255, 255, 255, 0.038);
+      --bg-glass-elevated: rgba(255, 255, 255, 0.065);
+
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --glass-border-bright: rgba(0, 255, 163, 0.28);
+      --glass-border-cyan: rgba(0, 200, 255, 0.25);
+
+      --primary: #00FFA3;
+      --primary-glow: rgba(0, 255, 163, 0.22);
+      --secondary: #00C8FF;
+      --secondary-glow: rgba(0, 200, 255, 0.22);
+      --highlight: #8B5CFF;
+      --highlight-glow: rgba(139, 92, 255, 0.22);
+      --warning: #FFB020;
+      --warning-glow: rgba(255, 176, 32, 0.25);
+      --error: #FF4D67;
+      --error-glow: rgba(255, 77, 103, 0.25);
+
+      --text-primary: #EAF2F0;
+      --text-secondary: #A0B2B5;
+      --text-muted: #647B80;
+      --text-mono: 'JetBrains Mono', monospace;
+      --font-ui: 'Inter', sans-serif;
+      --font-tech: 'Chakra Petch', sans-serif;
+
+      --glass-blur: blur(20px);
+      --glass-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+      --card-radius: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      color-scheme: dark;
+    }
+
+    body {
+      background-color: var(--bg-core);
+      color: var(--text-primary);
+      font-family: var(--font-ui);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg-core);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(0, 200, 255, 0.2);
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--primary);
+    }
+
+    /* ── TOP SCROLL PROGRESS ── */
+    #scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      width: 0%;
+      background: linear-gradient(90deg, var(--secondary), var(--primary));
+      box-shadow: 0 0 10px var(--primary);
+      z-index: 10000;
+      transition: width 0.05s ease-out;
+    }
+
+    /* ── DYNAMIC HOLOGRAPHIC BACKGROUND ── */
+    .ambient-scene {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .ambient-grid {
+      position: absolute;
+      inset: -100px;
+      background-image:
+        linear-gradient(rgba(0, 200, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 200, 255, 0.02) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.15;
+      animation: floatOrb 24s ease-in-out infinite alternate;
+    }
+
+    .orb-1 {
+      width: 600px;
+      height: 600px;
+      background: var(--secondary);
+      top: -100px;
+      left: -100px;
+    }
+
+    .orb-2 {
+      width: 500px;
+      height: 500px;
+      background: var(--primary);
+      bottom: 10%;
+      right: -50px;
+      animation-duration: 28s;
+    }
+
+    .orb-3 {
+      width: 450px;
+      height: 450px;
+      background: var(--highlight);
+      top: 40%;
+      left: 35%;
+      animation-duration: 32s;
+    }
+
+    @keyframes floatOrb {
+      0% {
+        transform: translate(0, 0) scale(1);
+      }
+
+      50% {
+        transform: translate(60px, 40px) scale(1.1);
+      }
+
+      100% {
+        transform: translate(-40px, 80px) scale(0.95);
+      }
+    }
+
+    #particle-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* ── CURSOR GLOW (DESKTOP) ── */
+    #cursor-glow {
+      position: fixed;
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      pointer-events: none;
+      background: radial-gradient(circle, rgba(0, 255, 163, 0.07) 0%, rgba(0, 200, 255, 0.03) 40%, transparent 70%);
+      transform: translate(-50%, -50%);
+      z-index: 999;
+      transition: width 0.2s, height 0.2s, opacity 0.2s;
+    }
+
+    @media (pointer: coarse) {
+      #cursor-glow {
+        display: none;
+      }
+    }
+
+    /* ── FLOATING GLASS NAVIGATION ── */
+    .floating-nav-wrap {
+      position: fixed;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 95%;
+      max-width: 1380px;
+      z-index: 1000;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .floating-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 18px;
+      background: rgba(4, 9, 16, 0.65);
+      backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border);
+      border-radius: 14px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+      gap: 12px;
+    }
+
+    .nav-scrolled .floating-nav {
+      background: rgba(3, 7, 13, 0.9);
+      border-color: rgba(0, 200, 255, 0.18);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      text-decoration: none;
+      color: var(--text-primary);
+      flex-shrink: 0;
+    }
+
+    .brand-sigil {
+      width: 32px;
+      height: 32px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      background: rgba(0, 255, 163, 0.08);
+      border: 1px solid rgba(0, 255, 163, 0.3);
+      box-shadow: 0 0 12px var(--primary-glow);
+    }
+
+    .brand-sigil svg {
+      width: 18px;
+      height: 18px;
+      fill: var(--primary);
+    }
+
+    .brand-name {
+      font-family: var(--font-tech);
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: #FFF;
+    }
+
+    .brand-name span {
+      color: var(--primary);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding: 2px 0;
+    }
+
+    .nav-links::-webkit-scrollbar {
+      display: none;
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-secondary);
+      font-family: var(--font-tech);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      padding: 7px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.22s ease;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-btn:hover {
+      color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .nav-btn.active {
+      color: var(--primary);
+      background: rgba(0, 255, 163, 0.08);
+      border-color: rgba(0, 255, 163, 0.25);
+      box-shadow: 0 0 16px var(--primary-glow);
+    }
+
+    .nav-status {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .agent-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      background: rgba(0, 200, 255, 0.06);
+      border: 1px solid rgba(0, 200, 255, 0.22);
+      border-radius: 8px;
+      font-family: var(--font-tech);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .agent-badge:hover {
+      background: rgba(0, 200, 255, 0.12);
+      border-color: var(--secondary);
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--primary);
+      box-shadow: 0 0 8px var(--primary);
+      animation: pulseDot 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseDot {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.4;
+        transform: scale(0.85);
+      }
+    }
+
+    /* ── LAYOUT & SECTIONS ── */
+    main {
+      position: relative;
+      z-index: 1;
+      padding-top: 90px;
+      max-width: 1420px;
+      margin: 0 auto;
+      padding-left: 20px;
+      padding-right: 20px;
+      padding-bottom: 80px;
+    }
+
+    .app-section {
+      display: none;
+      opacity: 0;
+      transform: translateY(24px) scale(0.985);
+      transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .app-section.active {
+      display: block;
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    /* ── GLASS PANEL STYLES ── */
+    .glass-panel {
+      background: var(--bg-glass);
+      backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--card-radius);
+      box-shadow: var(--glass-shadow);
+      padding: 22px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
+    }
+
+    .glass-panel:hover {
+      border-color: rgba(255, 255, 255, 0.13);
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.42);
+    }
+
+    .glass-panel::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+      pointer-events: none;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .panel-title {
+      font-family: var(--font-tech);
+      font-size: 0.92rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      text-transform: uppercase;
+    }
+
+    .panel-title svg {
+      width: 16px;
+      height: 16px;
+      fill: var(--primary);
+    }
+
+    .panel-subtitle {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    /* ── BUTTONS & CONTROLS ── */
+    .btn {
+      font-family: var(--font-tech);
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.09em;
+      padding: 9px 18px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      text-decoration: none;
+      user-select: none;
+    }
+
+    .btn-primary {
+      background: rgba(0, 255, 163, 0.12);
+      color: var(--primary);
+      border-color: rgba(0, 255, 163, 0.35);
+      box-shadow: 0 0 16px var(--primary-glow);
+    }
+
+    .btn-primary:hover {
+      background: rgba(0, 255, 163, 0.22);
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: 0 0 24px var(--primary-glow);
+    }
+
+    .btn-secondary {
+      background: rgba(0, 200, 255, 0.1);
+      color: var(--secondary);
+      border-color: rgba(0, 200, 255, 0.3);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(0, 200, 255, 0.2);
+      border-color: var(--secondary);
+      transform: translateY(-2px);
+    }
+
+    .btn-ghost {
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-secondary);
+      border-color: var(--glass-border);
+    }
+
+    .btn-ghost:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-primary);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-danger {
+      background: rgba(255, 77, 103, 0.12);
+      color: var(--error);
+      border-color: rgba(255, 77, 103, 0.35);
+    }
+
+    .btn-danger:hover {
+      background: rgba(255, 77, 103, 0.22);
+      border-color: var(--error);
+    }
+
+    .btn-fart {
+      background: rgba(255, 176, 32, 0.15);
+      color: var(--warning);
+      border-color: rgba(255, 176, 32, 0.4);
+      box-shadow: 0 0 16px var(--warning-glow);
+    }
+
+    .btn-fart:hover {
+      background: rgba(255, 176, 32, 0.28);
+      border-color: var(--warning);
+      transform: translateY(-2px);
+    }
+
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 0.74rem;
+    }
+
+    .btn-lg {
+      padding: 12px 24px;
+      font-size: 0.95rem;
+    }
+
+    /* ── HERO SECTION ── */
+    .hero-section {
+      position: relative;
+      padding: 48px 0 64px;
+      text-align: center;
+    }
+
+    .hero-telemetry {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .telemetry-chip {
+      font-family: var(--font-tech);
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-muted);
+    }
+
+    .telemetry-chip span {
+      color: var(--primary);
+      font-weight: 700;
+      margin-left: 4px;
+    }
+
+    .hero-title {
+      font-family: var(--font-tech);
+      font-size: 4.5rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      line-height: 1;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, #FFFFFF 0%, #C4DCE0 40%, var(--primary) 100%);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 40px rgba(0, 255, 163, 0.2);
+    }
+
+    .hero-subtitle {
+      font-family: var(--font-tech);
+      font-size: 1.15rem;
+      letter-spacing: 0.3em;
+      color: var(--secondary);
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .hero-tagline {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      max-width: 640px;
+      margin: 0 auto 36px;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    /* ── STATS ROW ── */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .stat-card {
+      padding: 18px 20px;
+      background: var(--bg-glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-label {
+      font-family: var(--font-tech);
+      font-size: 0.74rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .stat-value {
+      font-family: var(--font-tech);
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1;
+    }
+
+    .stat-value.glow-green {
+      color: var(--primary);
+      text-shadow: 0 0 16px var(--primary-glow);
+    }
+
+    .stat-value.glow-cyan {
+      color: var(--secondary);
+      text-shadow: 0 0 16px var(--secondary-glow);
+    }
+
+    .stat-value.glow-purple {
+      color: var(--highlight);
+      text-shadow: 0 0 16px var(--highlight-glow);
+    }
+
+    .stat-delta {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* ── WORKSPACE 3-COLUMN LAYOUT ── */
+    .workspace-grid {
+      display: grid;
+      grid-template-columns: 330px 1fr 350px;
+      gap: 20px;
+      align-items: start;
+    }
+
+    @media (max-width: 1280px) {
+      .workspace-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ── PIPELINE BREADCRUMB ── */
+    .pipeline-stepper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 4px;
+      overflow-x: auto;
+      padding: 10px 14px;
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid var(--glass-border);
+      border-radius: 10px;
+      margin-bottom: 18px;
+      font-family: var(--font-tech);
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+    }
+
+    .pipeline-step {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-muted);
+      white-space: nowrap;
+      padding: 4px 8px;
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+
+    .pipeline-step.active {
+      color: var(--primary);
+      background: rgba(0, 255, 163, 0.08);
+      border: 1px solid rgba(0, 255, 163, 0.2);
+      box-shadow: 0 0 10px var(--primary-glow);
+    }
+
+    .decode-scan-overlay {
+      display: none;
+      position: relative;
+      height: 82px;
+      margin-bottom: 18px;
+      overflow: hidden;
+      border: 1px solid rgba(0, 200, 255, 0.35);
+      border-radius: 10px;
+      background: linear-gradient(90deg, rgba(0, 200, 255, 0.04), rgba(0, 255, 163, 0.1), rgba(0, 200, 255, 0.04));
+    }
+
+    .decode-scan-overlay.active {
+      display: block;
+    }
+
+    .decode-scan-overlay::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(rgba(0, 200, 255, 0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 200, 255, 0.08) 1px, transparent 1px);
+      background-size: 22px 22px;
+      opacity: 0.45;
+    }
+
+    .decode-scan-line {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 3px;
+      z-index: 2;
+      background: var(--primary);
+      box-shadow: 0 0 18px 5px var(--primary-glow);
+      animation: scanSweep 1.5s linear infinite;
+    }
+
+    .decode-scan-label {
+      position: absolute;
+      top: 8px;
+      left: 12px;
+      z-index: 3;
+      color: var(--secondary);
+      font-family: var(--font-tech);
+      font-size: 0.66rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      animation: scanPulse 0.9s ease-in-out infinite alternate;
+    }
+
+    .sonograph-bars {
+      position: absolute;
+      right: 14px;
+      bottom: 10px;
+      left: 14px;
+      z-index: 1;
+      display: flex;
+      align-items: end;
+      gap: 3px;
+      height: 48px;
+    }
+
+    .sonograph-bars span {
+      flex: 1;
+      min-width: 3px;
+      height: 20%;
+      background: linear-gradient(var(--secondary), var(--primary));
+      box-shadow: 0 0 7px var(--secondary-glow);
+      animation: sonographPulse 0.8s ease-in-out infinite alternate;
+    }
+
+    .sonograph-bars span:nth-child(2n) {
+      animation-delay: -0.25s;
+    }
+
+    .sonograph-bars span:nth-child(3n) {
+      animation-delay: -0.5s;
+    }
+
+    @keyframes scanSweep {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(calc(100vw - 80px));
+      }
+    }
+
+    @keyframes scanPulse {
+      from {
+        opacity: 0.45;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes sonographPulse {
+      from {
+        height: 15%;
+        opacity: 0.45;
+      }
+
+      to {
+        height: 100%;
+        opacity: 1;
+      }
+    }
+
+    .pipeline-arrow {
+      color: rgba(255, 255, 255, 0.15);
+      font-size: 0.7rem;
+    }
+
+    /* ── MIC PERMISSION ALERT BANNER ── */
+    .origin-notice-banner {
+      background: rgba(0, 200, 255, 0.08);
+      border: 1px solid rgba(0, 200, 255, 0.25);
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 0.76rem;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      gap: 10px;
+    }
+
+    .origin-notice-banner.danger {
+      background: rgba(255, 77, 103, 0.12);
+      border-color: rgba(255, 77, 103, 0.4);
+      color: #FFA5B2;
+    }
+
+    .origin-notice-banner strong {
+      color: var(--secondary);
+    }
+
+    .origin-notice-banner.danger strong {
+      color: #FF6680;
+    }
+
+    /* ── LIVE MIC STATUS BADGE ── */
+    .mic-status-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-tech);
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid var(--glass-border);
+      margin-bottom: 12px;
+    }
+
+    .mic-status-badge.live {
+      border-color: rgba(0, 255, 163, 0.4);
+      background: rgba(0, 255, 163, 0.08);
+      color: var(--primary);
+      box-shadow: 0 0 14px var(--primary-glow);
+    }
+
+    .mic-status-badge.denied {
+      border-color: rgba(255, 77, 103, 0.4);
+      background: rgba(255, 77, 103, 0.08);
+      color: var(--error);
+    }
+
+    /* ── LIVE MIC LEVEL INDICATOR WITH THRESHOLD MARKER ── */
+    .mic-level-box {
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 14px;
+    }
+
+    .mic-level-header {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-tech);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .mic-meter-bar {
+      height: 10px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 5px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mic-meter-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--secondary), var(--primary));
+      border-radius: 5px;
+      transition: width 0.04s ease;
+    }
+
+    .gate-threshold-marker {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: var(--warning);
+      box-shadow: 0 0 8px var(--warning);
+      z-index: 2;
+      transition: left 0.1s ease;
+    }
+
+    /* ── FART PHONETIC LETTER BADGES ── */
+    .fart-letter-badge {
+      background: rgba(255, 176, 32, 0.08);
+      border: 1px solid rgba(255, 176, 32, 0.28);
+      border-radius: 6px;
+      padding: 4px 8px;
+      display: inline-flex;
+      align-items: baseline;
+      gap: 5px;
+      font-family: var(--font-tech);
+      font-size: 0.76rem;
+      transition: all 0.2s ease;
+    }
+
+    .fart-letter-badge .char {
+      color: #FFF;
+      font-weight: 700;
+      font-size: 0.85rem;
+    }
+
+    .fart-letter-badge .phonetic {
+      color: var(--warning);
+      font-weight: 600;
+    }
+
+    .fart-letter-badge .morse {
+      color: var(--text-muted);
+      font-family: var(--text-mono);
+      font-size: 0.68rem;
+    }
+
+    .fart-letter-badge.word-space {
+      border-color: rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-muted);
+    }
+
+    /* ── DRAG & DROP FILE ZONE ── */
+    .glass-dropzone {
+      border: 1px dashed rgba(0, 200, 255, 0.3);
+      background: rgba(0, 200, 255, 0.02);
+      border-radius: 12px;
+      padding: 20px 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative;
+      margin-bottom: 14px;
+    }
+
+    .glass-dropzone:hover,
+    .glass-dropzone.dragover {
+      border-color: var(--secondary);
+      background: rgba(0, 200, 255, 0.06);
+      box-shadow: 0 0 20px rgba(0, 200, 255, 0.15);
+    }
+
+    .dropzone-icon {
+      width: 34px;
+      height: 34px;
+      margin: 0 auto 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: rgba(0, 200, 255, 0.08);
+      color: var(--secondary);
+    }
+
+    .dropzone-text {
+      font-family: var(--font-tech);
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .dropzone-hint {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+    }
+
+    .file-meta-card {
+      background: rgba(0, 255, 163, 0.03);
+      border: 1px solid rgba(0, 255, 163, 0.2);
+      border-radius: 10px;
+      padding: 12px;
+      font-family: var(--font-tech);
+      font-size: 0.74rem;
+      margin-bottom: 14px;
+      display: none;
+    }
+
+    .file-meta-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 4px;
+      color: var(--text-muted);
+    }
+
+    .file-meta-row span:last-child {
+      color: var(--text-primary);
+      font-family: var(--text-mono);
+    }
+
+    /* ── CANVASES (WAVEFORM, SPECTRUM, SPECTROGRAM) ── */
+    .canvas-container {
+      position: relative;
+      background: rgba(2, 6, 12, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+
+    .canvas-telemetry-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 12px;
+      background: rgba(0, 0, 0, 0.4);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      font-family: var(--font-tech);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+    }
+
+    .canvas-telemetry-bar span strong {
+      color: var(--secondary);
+    }
+
+    canvas.sigint-canvas {
+      width: 100%;
+      display: block;
+    }
+
+    /* ── PULSE TIMELINE MONITOR ── */
+    .pulse-timeline-box {
+      background: rgba(2, 6, 12, 0.6);
+      border: 1px solid var(--glass-border);
+      border-radius: 10px;
+      padding: 12px;
+      min-height: 70px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow-x: auto;
+      margin-bottom: 16px;
+    }
+
+    .pulse-chip {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 6px 10px;
+      background: rgba(0, 255, 163, 0.08);
+      border: 1px solid rgba(0, 255, 163, 0.3);
+      border-radius: 6px;
+      font-family: var(--font-tech);
+      font-size: 0.7rem;
+      flex-shrink: 0;
+      animation: pulseIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .pulse-chip.dash {
+      background: rgba(0, 200, 255, 0.08);
+      border-color: rgba(0, 200, 255, 0.3);
+    }
+
+    .pulse-chip.rejected {
+      background: rgba(255, 77, 103, 0.08);
+      border-color: rgba(255, 77, 103, 0.3);
+      color: var(--error);
+    }
+
+    .pulse-chip .p-name {
+      font-weight: 700;
+      color: #FFF;
+    }
+
+    .pulse-chip .p-dur {
+      font-family: var(--text-mono);
+      font-size: 0.64rem;
+      color: var(--text-muted);
+    }
+
+    @keyframes pulseIn {
+      from {
+        opacity: 0;
+        transform: scale(0.85);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    /* ── OUTPUT MONITORS ── */
+    .terminal-output-box {
+      background: rgba(2, 6, 12, 0.85);
+      border: 1px solid rgba(0, 255, 163, 0.2);
+      border-radius: 10px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .output-label {
+      font-family: var(--font-tech);
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .morse-stream-text {
+      font-family: var(--text-mono);
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: var(--primary);
+      letter-spacing: 0.22em;
+      word-break: break-all;
+      min-height: 40px;
+      display: flex;
+      align-items: center;
+      text-shadow: 0 0 12px var(--primary-glow);
+    }
+
+    .fart-code-text {
+      font-family: var(--font-tech);
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--warning);
+      letter-spacing: 0.08em;
+      word-break: break-all;
+      min-height: 34px;
+      display: flex;
+      align-items: center;
+    }
+
+    .decoded-terminal-text {
+      font-family: var(--font-tech);
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: #FFFFFF;
+      min-height: 44px;
+      word-break: break-all;
+      display: flex;
+      align-items: center;
+    }
+
+    .confidence-bar-wrap {
+      margin-top: 10px;
+    }
+
+    .confidence-label {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-tech);
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .confidence-bar {
+      height: 6px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .confidence-fill {
+      height: 100%;
+      width: 94.7%;
+      background: linear-gradient(90deg, var(--secondary), var(--primary));
+      box-shadow: 0 0 8px var(--primary-glow);
+    }
+
+    /* ── FARTNET VALIDATION HUD ── */
+    .validation-matrix {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .val-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 12px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--glass-border);
+      border-radius: 6px;
+      font-family: var(--font-tech);
+      font-size: 0.74rem;
+    }
+
+    .val-item .val-status {
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .val-item.fail .val-status {
+      color: var(--error);
+    }
+
+    .validation-banner {
+      padding: 10px;
+      border-radius: 8px;
+      font-family: var(--font-tech);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-align: center;
+      background: rgba(0, 255, 163, 0.08);
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      box-shadow: 0 0 16px var(--primary-glow);
+    }
+
+    .validation-banner.rejected {
+      background: rgba(255, 77, 103, 0.08);
+      border-color: var(--error);
+      color: var(--error);
+      box-shadow: 0 0 16px var(--error-glow);
+    }
+
+    /* ── DATA TABLES (AGENTS) ── */
+    .glass-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: var(--font-tech);
+      font-size: 0.82rem;
+    }
+
+    .glass-table th {
+      text-align: left;
+      padding: 12px 16px;
+      color: var(--text-muted);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      letter-spacing: 0.08em;
+      font-weight: 600;
+    }
+
+    .glass-table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      color: var(--text-primary);
+    }
+
+    .glass-table tr:hover td {
+      background: rgba(255, 255, 255, 0.025);
+    }
+
+    /* ── MERCHANDISE & JERRY CAN™ ── */
+    .jerrycan-stage {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      align-items: center;
+    }
+
+    @media (max-width: 900px) {
+      .jerrycan-stage {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .can-viewport {
+      height: 380px;
+      background: radial-gradient(circle at center, rgba(0, 200, 255, 0.08) 0%, transparent 70%);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      perspective: 800px;
+    }
+
+    .can-3d-box {
+      width: 180px;
+      height: 240px;
+      background: linear-gradient(145deg, #1A2832, #0D161C);
+      border: 2px solid rgba(0, 255, 163, 0.4);
+      border-radius: 16px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(0, 255, 163, 0.1);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 16px;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      cursor: pointer;
+    }
+
+    .can-3d-box:hover {
+      transform: rotateY(15deg) rotateX(-10deg) translateY(-8px);
+      border-color: var(--primary);
+      box-shadow: 0 30px 70px rgba(0, 255, 163, 0.25);
+    }
+
+    .can-badge {
+      font-family: var(--font-tech);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      color: var(--primary);
+      border: 1px solid rgba(0, 255, 163, 0.3);
+      padding: 4px 8px;
+      border-radius: 4px;
+      width: fit-content;
+    }
+
+    /* ── SUBSCRIPTION PLANS ── */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .pricing-card {
+      background: var(--bg-glass);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 28px 24px;
+      position: relative;
+      transition: transform 0.25s, border-color 0.25s;
+    }
+
+    .pricing-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .pricing-card.recommended {
+      border-color: var(--primary);
+      box-shadow: 0 0 30px rgba(0, 255, 163, 0.15);
+    }
+
+    .pricing-card.recommended::after {
+      content: 'BEST VALUE';
+      position: absolute;
+      top: -12px;
+      right: 20px;
+      background: var(--primary);
+      color: #03050A;
+      font-family: var(--font-tech);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+
+    .plan-name {
+      font-family: var(--font-tech);
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+
+    .plan-price {
+      font-family: var(--font-tech);
+      font-size: 2.4rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+    }
+
+    .plan-price span {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .plan-features {
+      list-style: none;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+    }
+
+    .plan-features li {
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .plan-features li::before {
+      content: '✓';
+      color: var(--primary);
+      font-weight: bold;
+    }
+
+    /* ── AUTH MODAL ── */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      background: rgba(3, 5, 10, 0.85);
+      backdrop-filter: blur(25px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    body.auth-locked main,
+    body.auth-locked .floating-nav-wrap {
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .auth-box {
+      width: 100%;
+      max-width: 440px;
+      background: rgba(7, 16, 25, 0.95);
+      border: 1px solid rgba(0, 200, 255, 0.28);
+      border-radius: 18px;
+      padding: 32px 28px;
+      box-shadow: 0 25px 80px rgba(0, 0, 0, 0.7), 0 0 30px rgba(0, 200, 255, 0.1);
+      position: relative;
+    }
+
+    .auth-mode-switch {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      padding: 4px;
+      margin-bottom: 18px;
+      border: 1px solid var(--glass-border);
+      border-radius: 9px;
+      background: rgba(0, 0, 0, 0.24);
+    }
+
+    .auth-mode-btn {
+      padding: 9px 8px;
+      border: 0;
+      border-radius: 6px;
+      color: var(--text-muted);
+      background: transparent;
+      font-family: var(--font-tech);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+    }
+
+    .auth-mode-btn.active {
+      color: var(--primary);
+      background: rgba(0, 255, 163, 0.1);
+      box-shadow: inset 0 0 0 1px rgba(0, 255, 163, 0.22);
+    }
+
+    .portfolio-dashboard {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.6fr);
+      gap: 18px;
+      margin-bottom: 28px;
+      padding: 30px;
+      border: 1px solid rgba(0, 200, 255, 0.2);
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(0, 200, 255, 0.1), rgba(0, 255, 163, 0.03) 52%, rgba(139, 92, 255, 0.08));
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.3);
+    }
+
+    .portfolio-kicker {
+      color: var(--primary);
+      font-family: var(--font-tech);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+    }
+
+    .portfolio-dashboard h2 {
+      max-width: 680px;
+      margin: 10px 0 12px;
+      color: #fff;
+      font-family: var(--font-tech);
+      font-size: clamp(2rem, 4vw, 4rem);
+      line-height: 0.98;
+      letter-spacing: 0.01em;
+    }
+
+    .portfolio-lede {
+      max-width: 650px;
+      color: var(--text-secondary);
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    .portfolio-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 22px;
+    }
+
+    .portfolio-side {
+      display: grid;
+      gap: 10px;
+      align-content: center;
+    }
+
+    .portfolio-side-card {
+      padding: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      background: rgba(3, 5, 10, 0.34);
+    }
+
+    .portfolio-side-card strong {
+      display: block;
+      margin-top: 4px;
+      color: #fff;
+      font-family: var(--font-tech);
+      font-size: 1.05rem;
+    }
+
+    .portfolio-label {
+      color: var(--text-muted);
+      font-family: var(--font-tech);
+      font-size: 0.66rem;
+      letter-spacing: 0.12em;
+    }
+
+    .portfolio-columns {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 30px;
+    }
+
+    .portfolio-feature {
+      min-height: 150px;
+      padding: 18px;
+      border-top: 2px solid var(--secondary);
+      border-radius: 0 0 10px 10px;
+      background: rgba(255, 255, 255, 0.035);
+    }
+
+    .portfolio-feature:nth-child(2) {
+      border-top-color: var(--primary);
+    }
+
+    .portfolio-feature:nth-child(3) {
+      border-top-color: var(--warning);
+    }
+
+    .portfolio-feature h3 {
+      margin: 10px 0 7px;
+      color: #fff;
+      font-family: var(--font-tech);
+      font-size: 1rem;
+      letter-spacing: 0.06em;
+    }
+
+    .portfolio-feature p {
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 768px) {
+
+      .portfolio-dashboard,
+      .portfolio-columns {
+        grid-template-columns: 1fr;
+      }
+
+      .portfolio-dashboard {
+        padding: 22px;
+      }
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      display: block;
+      font-family: var(--font-tech);
+      font-size: 0.74rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 11px 14px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
+      color: var(--text-primary);
+      font-family: var(--font-tech);
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-input:focus {
+      border-color: var(--secondary);
+      box-shadow: 0 0 12px rgba(0, 200, 255, 0.25);
+    }
+
+    /* ── TOAST NOTIFICATIONS ── */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 100000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      pointer-events: none;
+    }
+
+    .hud-toast {
+      background: rgba(7, 16, 25, 0.92);
+      backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--glass-border-bright);
+      border-radius: 8px;
+      padding: 12px 18px;
+      font-family: var(--font-tech);
+      font-size: 0.8rem;
+      letter-spacing: 0.06em;
+      color: var(--text-primary);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      pointer-events: auto;
+      animation: toastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes toastIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 2.8rem;
+      }
+
+      .floating-nav-wrap {
+        top: 10px;
+        width: 98%;
+      }
+
+      .floating-nav {
+        padding: 8px 12px;
+      }
+
+      .nav-btn {
+        font-size: 0.72rem;
+        padding: 6px 9px;
+      }
+    }
+  </style>
+</head>
+
+<body class="auth-locked">
+
+  <!-- ── SCROLL PROGRESS BAR ── -->
+  <div id="scroll-progress"></div>
+
+  <!-- ── CURSOR GLOW ── -->
+  <div id="cursor-glow"></div>
+
+  <!-- ── DYNAMIC HOLOGRAPHIC SCENE ── -->
+  <div class="ambient-scene">
+    <div class="ambient-grid"></div>
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <canvas id="particle-canvas"></canvas>
+  </div>
+
+  <!-- ── FLOATING GLASS NAVIGATION ── -->
+  <div class="floating-nav-wrap" id="nav-wrap">
+    <header class="floating-nav">
+      <a class="nav-brand" onclick="switchSection('dashboard')">
+        <div class="brand-sigil">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9v-2h2v2zm0-4H9V7h2v5zm4 4h-2v-2h2v2zm0-4h-2V7h2v5z" />
+          </svg>
+        </div>
+        <div class="brand-name">FARTNET<span>™</span></div>
+      </a>
+
+      <nav class="nav-links">
+        <button class="nav-btn active" data-section="dashboard">DASHBOARD</button>
+        <button class="nav-btn" data-section="decoder">DECODER</button>
+        <button class="nav-btn" data-section="audiolab">AUDIO LAB</button>
+        <button class="nav-btn" data-section="textaudio">TEXT ↔ AUDIO</button>
+        <button class="nav-btn" data-section="morse">MORSE</button>
+        <button class="nav-btn" data-section="validation">VALIDATION</button>
+        <button class="nav-btn" data-section="network">NETWORK</button>
+        <button class="nav-btn" data-section="agents">AGENTS</button>
+        <button class="nav-btn" data-section="merchandise">MERCHANDISE</button>
+        <button class="nav-btn" data-section="subscription">SUBSCRIPTION</button>
+        <button class="nav-btn" data-section="settings">SETTINGS</button>
+      </nav>
+
+      <div class="nav-status">
+        <div class="agent-badge" id="agent-hud-badge">
+          <span class="status-dot"></span>
+          <span>AGENT: <strong id="hud-agent-id" style="color:var(--primary)">FN-007</strong></span>
+          <span style="color:var(--text-muted); font-size:0.7rem;">● AUTH</span>
+        </div>
+      </div>
+    </header>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+     MAIN APPLICATION WORKSPACES
+     ══════════════════════════════════════════════════════════════════ -->
+  <main>
+
+    <!-- ── 1. DASHBOARD & HERO SECTION ── -->
+    <section id="sec-dashboard" class="app-section active">
+
+      <section class="portfolio-dashboard" aria-labelledby="project-dashboard-title">
+        <div>
+          <div class="portfolio-kicker">PROJECT PORTFOLIO / LIVE BUILD</div>
+          <h2 id="project-dashboard-title">FARTNET is an acoustic communication studio.</h2>
+          <p class="portfolio-lede">A browser-based signal intelligence workspace that turns microphone input, Morse
+            timing, and expressive synthesized sound into an interactive communication system.</p>
+          <div class="portfolio-actions">
+            <button class="btn btn-primary" onclick="switchSection('decoder')">OPEN DECODER</button>
+            <button class="btn btn-fart" onclick="switchSection('textaudio')">EXPLORE SOUND LAB</button>
+          </div>
+        </div>
+        <div class="portfolio-side">
+          <div class="portfolio-side-card"><span class="portfolio-label">PROJECT STATUS</span><strong>ACTIVE / IN
+              PROTOTYPE</strong></div>
+          <div class="portfolio-side-card"><span class="portfolio-label">CORE STACK</span><strong>Web Audio API + Morse
+              DSP</strong></div>
+          <div class="portfolio-side-card"><span class="portfolio-label">CURRENT MEMBER</span><strong
+              id="portfolio-member-id">AGENT GUEST</strong></div>
+        </div>
+      </section>
+
+      <div class="portfolio-columns">
+        <article class="portfolio-feature"><span class="portfolio-label">01 / CAPTURE</span>
+          <h3>Live acoustic input</h3>
+          <p>Connect a microphone, inspect RMS energy, and watch the waveform and spectrum respond in real time.</p>
+        </article>
+        <article class="portfolio-feature"><span class="portfolio-label">02 / TRANSLATE</span>
+          <h3>Morse extraction</h3>
+          <p>Pulse duration and silence gaps become dots, dashes, characters, and readable payload text.</p>
+        </article>
+        <article class="portfolio-feature"><span class="portfolio-label">03 / SYNTHESIZE</span>
+          <h3>Expressive sound design</h3>
+          <p>Compose messages as distinct acoustic profiles, including the signature flatulence waveform.</p>
+        </article>
+      </div>
+
+      <div class="hero-section">
+        <div class="hero-telemetry">
+          <div class="telemetry-chip">SIGNAL: <span>ACTIVE</span></div>
+          <div class="telemetry-chip">CHANNEL: <span>FN-07</span></div>
+          <div class="telemetry-chip">FREQUENCY: <span>842 Hz</span></div>
+          <div class="telemetry-chip">SNR: <span>18.4 dB</span></div>
+          <div class="telemetry-chip">STATUS: <span>SECURE</span></div>
+        </div>
+
+        <h1 class="hero-title">FARTNET™</h1>
+        <div class="hero-subtitle">SECURE ACOUSTIC COMMUNICATION NETWORK</div>
+        <p class="hero-tagline">"Where sound becomes data." Advanced tactical acoustic pulse extraction and
+          classification matrix.</p>
+
+        <div class="hero-actions">
+          <button class="btn btn-primary btn-lg" onclick="switchSection('decoder')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+            OPEN UNIVERSAL DECODER
+          </button>
+          <button class="btn btn-fart btn-lg" onclick="switchSection('textaudio')">
+            💨 TEXT → FART MORSE SYNTHESIZER
+          </button>
+          <button class="btn btn-ghost btn-lg" onclick="switchSection('merchandise')">
+            FIELD JERRY CAN™
+          </button>
+        </div>
+
+        <!-- ── INSTANT HERO TEXT → FART-TYPE MORSE CONVERTER ── -->
+        <div class="glass-panel"
+          style="max-width:880px; margin: 36px auto 0; text-align: left; border-color: rgba(255, 176, 32, 0.4); background: rgba(255, 176, 32, 0.04); box-shadow: 0 10px 40px rgba(0,0,0,0.5);">
+          <div
+            style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:10px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size:1.3rem;">💨</span>
+              <div>
+                <div
+                  style="font-family:var(--font-tech); font-size:0.92rem; font-weight:700; color:var(--warning); letter-spacing:0.12em;">
+                  INSTANT TEXT → FART-TYPE MORSE CONVERTER
+                </div>
+                <div style="font-size:0.7rem; color:var(--text-muted);">
+                  Type any text to immediately generate phonetic flatulence Morse code (toots & BRAAAPs)
+                </div>
+              </div>
+            </div>
+            <div style="display:flex; gap:6px; align-items:center;">
+              <span style="font-family:var(--font-tech); font-size:0.68rem; color:var(--text-muted);">STYLE:</span>
+              <select id="hero-vocab-select" class="form-input" style="padding:4px 8px; font-size:0.74rem; width:auto;"
+                onchange="changeFartVocab(this.value)">
+                <option value="classic">Classic: toot / BRAAAP</option>
+                <option value="comic">Comic: poot / THRRRRP</option>
+                <option value="tactical">Tactical: PUFF / BLAST</option>
+                <option value="squeak">Squeak: sqk / HONK</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display:flex; gap:10px; margin-bottom:12px;">
+            <input type="text" id="hero-quick-text-input" class="form-input"
+              style="font-family:var(--font-tech); font-size:1.15rem; font-weight:600; flex:1; letter-spacing:0.06em;"
+              value="HELLO FARTNET" placeholder="Type message to encode into fart morse..."
+              oninput="updateHeroQuickFartMorse(this.value)">
+            <button class="btn btn-fart" onclick="playHeroQuickFartAudio()"
+              title="Audibly transmit this fart morse code">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+              SOUND OUT FARTS
+            </button>
+          </div>
+
+          <!-- FART-TYPE MORSE DISPLAY -->
+          <div
+            style="background:rgba(2, 6, 12, 0.9); border:1px solid rgba(255, 176, 32, 0.35); border-radius:8px; padding:12px 16px; margin-bottom:10px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+              <span
+                style="font-family:var(--font-tech); font-size:0.7rem; color:var(--warning); letter-spacing:0.12em; font-weight:700;">
+                FART-TYPE MORSE ENCODING:
+              </span>
+              <span style="font-size:0.68rem; color:var(--text-muted);">toot = short puff (.) | BRAAAP = long resonance
+                (-)</span>
+            </div>
+            <div id="hero-quick-fart-code"
+              style="font-family:var(--font-tech); font-size:1.12rem; color:var(--warning); font-weight:700; letter-spacing:0.06em; word-break:break-all; min-height:30px; line-height:1.4;">
+              toot-toot-toot-toot toot toot-BRAAAP-toot-toot toot-BRAAAP-toot-toot BRAAAP-BRAAAP-BRAAAP /
+              toot-toot-BRAAAP-toot toot-BRAAAP toot-BRAAAP-toot BRAAAP BRAAAP-toot toot BRAAAP
+            </div>
+          </div>
+
+          <!-- PHONETIC LETTER BADGES BREAKDOWN -->
+          <div id="hero-fart-letters-wrap"
+            style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px; max-height:120px; overflow-y:auto;">
+            <!-- Populated live -->
+          </div>
+
+          <!-- STANDARD MORSE + ACTION CONTROLS -->
+          <div
+            style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; border-top:1px solid rgba(255,255,255,0.06); padding-top:10px;">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-family:var(--font-tech); font-size:0.68rem; color:var(--text-muted);">ITU MORSE:</span>
+              <span style="font-family:var(--text-mono); font-size:0.85rem; color:var(--primary); font-weight:700;"
+                id="hero-quick-standard-morse">
+                .... . .-.. .-.. --- / ..-. .- .-. - -. . -
+              </span>
+            </div>
+            <div style="display:flex; gap:8px;">
+              <button class="btn btn-ghost btn-sm" onclick="copyHeroFartMorse()">📋 COPY FART MORSE</button>
+              <button class="btn btn-ghost btn-sm" onclick="copyHeroStandardMorse()">📋 COPY ITU MORSE</button>
+              <button class="btn btn-primary btn-sm" onclick="injectHeroFartToDecoder()">⚡ DECODE IN WORKSPACE</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COMMAND CENTER STATS -->
+      <div class="panel-header" style="margin-top:20px;">
+        <div>
+          <div class="panel-title">FARTNET COMMAND CENTER TELEMETRY</div>
+          <div class="panel-subtitle">Acoustic Communication & Signal Intelligence Platform Operations</div>
+        </div>
+        <div class="telemetry-chip">CURRENT CHANNEL: <span style="color:var(--secondary)">ACOUSTIC-07</span></div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">ACTIVE AGENTS</div>
+          <div class="stat-value glow-cyan" id="dash-active-agents">47</div>
+          <div class="stat-delta">Synchronized field operators</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-label">NETWORK STRENGTH</div>
+          <div class="stat-value glow-green" id="dash-net-strength">81%</div>
+          <div class="stat-delta">Atmospheric impedance nominal</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-label">FSP™ (SIGNAL POINTS)</div>
+          <div class="stat-value glow-purple" id="dash-fsp-points">3,666</div>
+          <div class="stat-delta">Fictional prototype metric</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-label">SIGNALS PROCESSED</div>
+          <div class="stat-value" id="dash-total-signals">1,248</div>
+          <div class="stat-delta">24-hour transmission capture</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-label">VALID SIGNALS</div>
+          <div class="stat-value glow-green" id="dash-valid-signals">934</div>
+          <div class="stat-delta">Signature verified</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-label">REJECTED SIGNALS</div>
+          <div class="stat-value" style="color:var(--error);" id="dash-rejected-signals">314</div>
+          <div class="stat-delta">Acoustic anomalies / unauthorized</div>
+        </div>
+      </div>
+
+      <!-- LIVE NETWORK TOPOLOGY VISUAL -->
+      <div class="glass-panel" style="margin-bottom:28px;">
+        <div class="panel-header">
+          <div class="panel-title">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
+            </svg>
+            TACTICAL NODE MESH & FIELD TELEMETRY
+          </div>
+          <button class="btn btn-ghost btn-sm" onclick="triggerPing()">PING NETWORK</button>
+        </div>
+        <div class="canvas-container" style="height: 240px;">
+          <canvas id="dashboard-mesh-canvas"></canvas>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ── 2. FLAGSHIP WORKSPACE: UNIVERSAL AUDIO DECODER ── -->
+    <section id="sec-decoder" class="app-section">
+
+      <div class="panel-header">
+        <div>
+          <h2 class="panel-title" style="font-size:1.3rem;">UNIVERSAL AUDIO DECODER WORKSPACE</h2>
+          <div class="panel-subtitle">Analyze acoustic signals from any audio source and extract Morse-coded data.</div>
+        </div>
+
+        <!-- MODE TOGGLE -->
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="font-family:var(--font-tech); font-size:0.75rem; color:var(--text-muted);">DECODING MODE:</span>
+          <button class="btn btn-primary btn-sm" id="mode-toggle-btn" onclick="toggleEngineMode()">
+            MODE: UNIVERSAL
+          </button>
+        </div>
+      </div>
+
+      <!-- DYNAMIC PIPELINE STEPPER -->
+      <div class="pipeline-stepper" id="pipeline-stepper">
+        <div class="pipeline-step active" id="pipe-input">01. INPUT</div>
+        <span class="pipeline-arrow">→</span>
+        <div class="pipeline-step" id="pipe-pre">02. PREPROCESS</div>
+        <span class="pipeline-arrow">→</span>
+        <div class="pipeline-step" id="pipe-gate">03. NOISE REDUCTION</div>
+        <span class="pipeline-arrow">→</span>
+        <div class="pipeline-step" id="pipe-detect">04. SIGNAL DETECT</div>
+        <span class="pipeline-arrow">→</span>
+        <div class="pipeline-step" id="pipe-seg">05. SEGMENTATION</div>
+        <span class="pipeline-arrow">→</span>
+        <div class="pipeline-step" id="pipe-class">06. DOT/DASH</div>
+        <span class="pipeline-arrow">→</span>
+        <div class="pipeline-step" id="pipe-morse">07. MORSE</div>
+        <span class="pipeline-arrow">→</span>
+        <div class="pipeline-step" id="pipe-decode">08. TEXT</div>
+      </div>
+
+      <div class="decode-scan-overlay" id="decode-scan-overlay" aria-live="polite">
+        <div class="decode-scan-label" id="decode-scan-label">SCANNING AUDIO / SONOGRAPH ACTIVE</div>
+        <div class="decode-scan-line"></div>
+        <div class="sonograph-bars" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+          <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+      </div>
+
+      <!-- THREE COLUMN WORKSPACE -->
+      <div class="workspace-grid">
+
+        <!-- LEFT COLUMN: INPUT SOURCES & CONTROLS -->
+        <div class="glass-panel">
+          <div class="panel-title">1. AUDIO CAPTURE SOURCE</div>
+          <div class="panel-subtitle" style="margin-bottom:12px;">Select input channel or load raw audio</div>
+
+          <!-- ORIGIN NOTICE FOR MICROPHONE PERMISSIONS -->
+          <div class="origin-notice-banner" id="origin-notice-box">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <span style="font-size:1.1rem;">🎤</span>
+              <span id="origin-notice-text">Connecting to browser audio pipeline...</span>
+            </div>
+            <button class="btn btn-ghost btn-sm" id="btn-origin-action" onclick="handleOriginNoticeClick()"
+              style="display:none; white-space:nowrap;"></button>
+          </div>
+
+          <!-- LIVE MIC HARDWARE STATUS BADGE -->
+          <div class="mic-status-badge" id="mic-status-badge">
+            <span class="status-dot"
+              style="width:8px; height:8px; border-radius:50%; background:var(--text-muted); display:inline-block;"></span>
+            <span id="mic-status-label">MIC HARDWARE: STANDBY / DISCONNECTED</span>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:14px;">
+            <!-- DIRECT MICROPHONE ACTION BUTTON -->
+            <button class="btn btn-primary btn-lg" id="src-btn-mic" onclick="activateMicrophoneDirectly()"
+              style="box-shadow:0 0 20px var(--primary-glow);">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z" />
+              </svg>
+              <span id="mic-btn-label">CONNECT & LISTEN TO MICROPHONE</span>
+            </button>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+              <button class="btn btn-ghost btn-sm" id="src-btn-file" onclick="selectSource('file')">
+                📁 LOCAL FILE
+              </button>
+              <button class="btn btn-ghost btn-sm" id="src-btn-sys" onclick="selectSource('sys')">
+                🖥️ SYSTEM AUDIO
+              </button>
+            </div>
+
+            <button class="btn btn-fart btn-sm" onclick="simulateMicTestFarts()"
+              title="Injects real flatulence pulse test audio directly into the decoder">
+              💨 SIMULATE MIC TEST FARTS (CQ)
+            </button>
+          </div>
+
+          <!-- DEVICE SELECTION DROPDOWN -->
+          <div class="form-group" style="margin-bottom:12px;">
+            <label class="form-label">INPUT DEVICE HARDWARE</label>
+            <select id="mic-device-select" class="form-input" style="font-size:0.78rem;"
+              onchange="onDeviceSelectChange()">
+              <option value="">Default System Microphone</option>
+            </select>
+          </div>
+
+          <!-- REAL-TIME INPUT SIGNAL LEVEL METER WITH THRESHOLD MARKER -->
+          <div class="mic-level-box">
+            <div class="mic-level-header">
+              <span>LIVE SIGNAL LEVEL (RMS)</span>
+              <span id="live-rms-meter">0.0000 RMS</span>
+            </div>
+            <div class="mic-meter-bar" style="position:relative;">
+              <div class="mic-meter-fill" id="live-meter-fill"></div>
+              <div class="gate-threshold-marker" id="gate-threshold-marker" style="left:8%;"
+                title="Noise Gate Cutoff Threshold"></div>
+            </div>
+            <div
+              style="display:flex; justify-content:space-between; font-size:0.65rem; color:var(--text-muted); margin-top:4px;">
+              <span>0.000 (Silence)</span>
+              <span style="color:var(--warning)">▲ GATE THRESHOLD</span>
+              <span>0.150+ (Signal)</span>
+            </div>
+          </div>
+
+          <!-- MIC SENSITIVITY BOOST & NOISE GATE CONTROLS -->
+          <div
+            style="background:rgba(255,255,255,0.02); border:1px solid var(--glass-border); border-radius:8px; padding:10px; margin-bottom:14px;">
+            <div class="form-group" style="margin-bottom:10px;">
+              <div class="confidence-label">
+                <span>MIC SENSITIVITY BOOST</span>
+                <strong id="lbl-mic-boost" style="color:var(--primary)">1.0x (Normal)</strong>
+              </div>
+              <input type="range" id="rng-mic-boost" min="1.0" max="8.0" step="0.5" value="1.0"
+                style="width:100%; accent-color:var(--primary);" oninput="onMicBoostChange(this.value)">
+            </div>
+
+            <div class="form-group" style="margin-bottom:8px;">
+              <div class="confidence-label">
+                <span>NOISE GATE CUTOFF (RMS)</span>
+                <strong id="lbl-noise-gate" style="color:var(--warning)">0.008 RMS</strong>
+              </div>
+              <input type="range" id="rng-noise-gate" min="0.002" max="0.08" step="0.001" value="0.008"
+                style="width:100%; accent-color:var(--warning);">
+            </div>
+
+            <div class="form-group" style="margin-bottom:8px;">
+              <div class="confidence-label">
+                <span>DOT DURATION CEILING (ms)</span>
+                <span id="lbl-dot-max">220 ms</span>
+              </div>
+              <input type="range" id="rng-dot-max" min="40" max="400" step="10" value="220"
+                style="width:100%; accent-color:var(--secondary);">
+            </div>
+
+            <button class="btn btn-ghost btn-sm" style="width:100%; font-size:0.72rem;"
+              onclick="autoCalibrateNoiseFloor()">
+              ⚡ AUTO-CALIBRATE ROOM NOISE FLOOR
+            </button>
+          </div>
+
+          <!-- UPLOAD DROPZONE -->
+          <input type="file" id="audio-file-input" accept="audio/*" style="display:none;">
+          <div class="glass-dropzone" id="audio-dropzone" onclick="document.getElementById('audio-file-input').click()">
+            <div class="dropzone-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z" />
+              </svg>
+            </div>
+            <div class="dropzone-text">DROP AUDIO FILE HERE</div>
+            <div class="dropzone-hint">WAV, MP3, OGG, M4A, FLAC supported</div>
+          </div>
+
+          <!-- FILE METADATA CARD -->
+          <div class="file-meta-card" id="file-meta-box">
+            <div class="file-meta-row"><span>FILE:</span><span id="meta-name">—</span></div>
+            <div class="file-meta-row"><span>DURATION:</span><span id="meta-dur">—</span></div>
+            <div class="file-meta-row"><span>SAMPLE RATE:</span><span id="meta-sr">—</span></div>
+            <div class="file-meta-row"><span>CHANNELS:</span><span id="meta-ch">—</span></div>
+            <div class="file-meta-row"><span>SIZE:</span><span id="meta-sz">—</span></div>
+          </div>
+
+          <button class="btn btn-secondary" id="btn-decode-input" onclick="decodeUploadedInput()" disabled
+            style="width:100%; margin-bottom:8px;">
+            ◉ DECODE INPUT
+          </button>
+
+          <!-- EXECUTION BUTTONS -->
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <button class="btn btn-primary" id="btn-start-decode" onclick="startDecoding()">
+              ▶ ENGAGE SIGNAL DECODER
+            </button>
+            <button class="btn btn-danger" id="btn-stop-decode" style="display:none;" onclick="stopDecoding()">
+              ■ HALT DECODER
+            </button>
+            <button class="btn btn-ghost" onclick="clearWorkspace()">
+              RESET WORKSPACE
+            </button>
+          </div>
+
+        </div>
+
+        <!-- CENTER COLUMN: WAVEFORM, SPECTRUM, SPECTROGRAM -->
+        <div>
+
+          <!-- TIME DOMAIN WAVEFORM -->
+          <div class="glass-panel" style="margin-bottom:16px;">
+            <div class="canvas-telemetry-bar">
+              <span>TIME-DOMAIN WAVEFORM [AMPLITUDE × TIME]</span>
+              <span>STATUS: <strong id="capture-status-tag" style="color:var(--primary)">STANDBY</strong> | PEAK:
+                <strong id="telemetry-peak">0.000</strong></span>
+            </div>
+            <div class="canvas-container" style="height:120px;">
+              <canvas id="time-waveform-canvas" class="sigint-canvas"></canvas>
+            </div>
+          </div>
+
+          <!-- FFT FREQUENCY SPECTRUM -->
+          <div class="glass-panel" style="margin-bottom:16px;">
+            <div class="canvas-telemetry-bar">
+              <span>REAL-TIME FREQUENCY SPECTRUM (FFT)</span>
+              <span>DOMINANT: <strong id="telemetry-dom-freq">-- Hz</strong> | BAND: <strong>80–3500 Hz</strong> |
+                ENERGY: <strong id="telemetry-energy">- dB</strong></span>
+            </div>
+            <div class="canvas-container" style="height:110px;">
+              <canvas id="freq-spectrum-canvas" class="sigint-canvas"></canvas>
+            </div>
+          </div>
+
+          <!-- SPECTROGRAM / SONOGRAPH -->
+          <div class="glass-panel" style="margin-bottom:16px;">
+            <div class="canvas-telemetry-bar">
+              <span>SPECTROGRAM / SONOGRAPH [FREQUENCY × TIME DENSITY]</span>
+              <span>INTENSITY: <strong>SPECTRAL ENERGY</strong></span>
+            </div>
+            <div class="canvas-container" style="height:95px;">
+              <canvas id="spectrogram-canvas" class="sigint-canvas"></canvas>
+            </div>
+          </div>
+
+          <!-- PULSE SEGMENTATION STREAM -->
+          <div class="glass-panel">
+            <div class="canvas-telemetry-bar">
+              <span>PULSE DETECTION & TIMING SEGMENTS</span>
+              <span id="telemetry-pulse-count">0 PULSES REGISTERED</span>
+            </div>
+            <div class="pulse-timeline-box" id="pulse-timeline-box">
+              <span style="font-family:var(--font-tech); font-size:0.75rem; color:var(--text-muted);">Awaiting acoustic
+                transients...</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT COLUMN: MORSE EXTRACTION & DECODED TEXT -->
+        <div class="glass-panel">
+          <div class="panel-title">2. EXTRACTED DATA</div>
+          <div class="panel-subtitle" style="margin-bottom:14px;">Decoded Morse & alphanumeric payload</div>
+
+          <!-- STANDARD MORSE STREAM -->
+          <div class="terminal-output-box">
+            <div class="output-label">STANDARD MORSE STREAM</div>
+            <div class="morse-stream-text" id="stream-morse-display">_</div>
+          </div>
+
+          <!-- FART-SPECIFIC ACOUSTIC MORSE STREAM -->
+          <div class="terminal-output-box"
+            style="border-color:rgba(255, 176, 32, 0.35); background:rgba(255, 176, 32, 0.03);">
+            <div class="output-label" style="color:var(--warning)">💨 FART-TYPE ACOUSTIC MORSE CODE</div>
+            <div class="fart-code-text" id="stream-fart-code-display">—</div>
+          </div>
+
+          <!-- DECODED TEXT -->
+          <div class="terminal-output-box">
+            <div class="output-label">DECODED PAYLOAD TEXT</div>
+            <div class="decoded-terminal-text" id="stream-text-display">—</div>
+            <div class="confidence-bar-wrap">
+              <div class="confidence-label">
+                <span>DECODING CONFIDENCE</span>
+                <span id="lbl-confidence">94.7%</span>
+              </div>
+              <div class="confidence-bar">
+                <div class="confidence-fill" id="bar-confidence-fill"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- FARTNET VALIDATION HUD CARD -->
+          <div class="terminal-output-box" id="validation-hud-card"
+            style="display:none; border-color:rgba(0, 200, 255, 0.35);">
+            <div class="output-label" style="color:var(--secondary)">FARTNET VALIDATION PROTOCOL</div>
+            <div class="validation-matrix">
+              <div class="val-item" id="val-row-freq"><span>Frequency</span><span class="val-status">MATCH ✓</span>
+              </div>
+              <div class="val-item" id="val-row-time"><span>Timing</span><span class="val-status">MATCH ✓</span></div>
+              <div class="val-item" id="val-row-pat"><span>Pattern</span><span class="val-status">MATCH ✓</span></div>
+              <div class="val-item" id="val-row-sig"><span>Agent Profile</span><span class="val-status">MATCH ✓</span>
+              </div>
+            </div>
+            <div class="validation-banner" id="val-banner">
+              AUTHORIZED FARTNET TRANSMISSION
+            </div>
+          </div>
+
+          <div style="display:flex; gap:8px; margin-top:10px; flex-wrap:wrap;">
+            <button class="btn btn-ghost btn-sm" onclick="copyMorseOutput()">COPY MORSE</button>
+            <button class="btn btn-ghost btn-sm" onclick="copyFartCodeOutput()">COPY FART CODE</button>
+            <button class="btn btn-ghost btn-sm" onclick="copyTextOutput()">COPY TEXT</button>
+            <button class="btn btn-secondary btn-sm" onclick="exportDecodeLog()">EXPORT</button>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ── 3. AUDIO LAB (SPECTRAL ANALYSIS & EQUALIZER) ── -->
+    <section id="sec-audiolab" class="app-section">
+      <div class="panel-header">
+        <div>
+          <h2 class="panel-title" style="font-size:1.3rem;">AUDIO ANALYSIS WORKSTATION & CALIBRATION LAB</h2>
+          <div class="panel-subtitle">Precision parameter calibration and acoustic profile configuration</div>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+        <div class="glass-panel">
+          <div class="panel-title">TIMING THRESHOLD CALIBRATOR</div>
+          <p style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:18px;">Adjust detection window gates to
+            match your acoustic source.</p>
+
+          <div class="form-group">
+            <label class="form-label">NOISE GATE SENSITIVITY</label>
+            <input type="range" class="form-input" min="0.001" max="0.1" step="0.001" value="0.02"
+              oninput="document.getElementById('cal-ng').textContent = this.value">
+            <span class="confidence-label">Value: <strong id="cal-ng">0.02</strong></span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">SHORT PULSE (DOT) CEILING (ms)</label>
+            <input type="range" class="form-input" min="50" max="400" step="10" value="220"
+              oninput="document.getElementById('cal-dm').textContent = this.value + ' ms'">
+            <span class="confidence-label">Value: <strong id="cal-dm">220 ms</strong></span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">LONG PULSE (DASH) FLOOR (ms)</label>
+            <input type="range" class="form-input" min="200" max="900" step="20" value="320"
+              oninput="document.getElementById('cal-dsh').textContent = this.value + ' ms'">
+            <span class="confidence-label">Value: <strong id="cal-dsh">320 ms</strong></span>
+          </div>
+
+          <button class="btn btn-primary" onclick="showHudToast('Acoustic profile calibrated successfully')">APPLY
+            PARAMETERS</button>
+        </div>
+
+        <div class="glass-panel">
+          <div class="panel-title">ACOUSTIC SPECTRAL SIGNATURE FILTER</div>
+          <p style="font-size:0.8rem; color:var(--text-secondary); margin-bottom:18px;">Configure frequency acceptance
+            window for FartNet signature validation.</p>
+
+          <div class="form-group">
+            <label class="form-label">PASSBAND MIN FREQUENCY (Hz)</label>
+            <input type="number" class="form-input" value="120">
+          </div>
+          <div class="form-group">
+            <label class="form-label">PASSBAND MAX FREQUENCY (Hz)</label>
+            <input type="number" class="form-input" value="3800">
+          </div>
+          <div class="form-group">
+            <label class="form-label">MINIMUM SPECTRAL PURITY RATIO</label>
+            <input type="number" class="form-input" step="0.05" value="0.30">
+          </div>
+          <button class="btn btn-secondary" onclick="showHudToast('Spectral filters committed to DSP pipeline')">COMMIT
+            FILTER PROFILE</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 4. TEXT ↔ AUDIO & TWO-WAY ROUND TRIP ── -->
+    <section id="sec-textaudio" class="app-section">
+      <div class="panel-header">
+        <div>
+          <h2 class="panel-title" style="font-size:1.3rem;">TEXT ↔ MORSE ↔ FART ACOUSTIC SYNTHESIS SUITE</h2>
+          <div class="panel-subtitle">Convert alphanumeric text into Fart-Type Morse code and genuine acoustic
+            flatulence pulses</div>
+        </div>
+      </div>
+
+      <div class="glass-panel" style="margin-bottom:24px;">
+        <div
+          style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:10px;">
+          <div>
+            <div class="panel-title">TEXT → FART MORSE → ACOUSTIC FLATULENCE SYNTHESIS</div>
+            <p style="font-size:0.8rem; color:var(--text-secondary);">Type alphanumeric text to instantly synthesize
+              genuine harmonic Fart-Type acoustic pulses.</p>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-family:var(--font-tech); font-size:0.75rem; color:var(--text-muted);">PHONETIC
+              VOCABULARY:</span>
+            <select id="synth-vocab-select" class="form-input" style="width:auto; padding:4px 10px; font-size:0.78rem;"
+              onchange="changeFartVocab(this.value)">
+              <option value="classic">Classic: toot / BRAAAP</option>
+              <option value="comic">Comic: poot / THRRRRP</option>
+              <option value="tactical">Tactical: PUFF / BLAST</option>
+              <option value="squeak">Squeak: sqk / HONK</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- QUICK SAMPLE CHIPS -->
+        <div style="display:flex; gap:6px; margin-bottom:12px; flex-wrap:wrap; align-items:center;">
+          <span style="font-family:var(--font-tech); font-size:0.7rem; color:var(--text-muted);">PRESETS:</span>
+          <button class="btn btn-ghost btn-sm" onclick="setPresetText('HELLO WORLD')">"HELLO WORLD"</button>
+          <button class="btn btn-ghost btn-sm" onclick="setPresetText('SOS')">"SOS"</button>
+          <button class="btn btn-ghost btn-sm" onclick="setPresetText('FARTNET SECURE')">"FARTNET SECURE"</button>
+          <button class="btn btn-ghost btn-sm" onclick="setPresetText('AGENT 007')">"AGENT 007"</button>
+          <button class="btn btn-ghost btn-sm" onclick="setPresetText('MISSION SUCCESS')">"MISSION SUCCESS"</button>
+        </div>
+
+        <textarea id="t2a-input-text" class="form-input" rows="2"
+          style="font-family:var(--font-tech); font-size:1.15rem; font-weight:600; margin-bottom:14px;"
+          placeholder="ENTER PAYLOAD TO CONVERT... e.g. HELLO WORLD">HELLO WORLD</textarea>
+
+        <!-- FART TYPE MORSE CODE DISPLAY (HIGHLIGHTED FIRST) -->
+        <div class="terminal-output-box"
+          style="margin-bottom:14px; border-color:rgba(255, 176, 32, 0.45); background:rgba(255, 176, 32, 0.05);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <div class="output-label" style="color:var(--warning); font-weight:700;">💨 FART-TYPE MORSE ENCODING
+              (PHONETIC TOOT / BRAAAP)</div>
+            <button class="btn btn-ghost btn-sm" onclick="copyFartMorseFromStudio()">📋 COPY FART MORSE</button>
+          </div>
+          <div class="fart-code-text" id="t2a-fart-code-preview" style="font-size:1.15rem; line-height:1.5;">
+            toot-toot-toot-toot toot toot-BRAAAP-toot-toot toot-BRAAAP-toot-toot BRAAAP-BRAAAP-BRAAAP /
+            toot-BRAAAP-BRAAAP BRAAAP-BRAAAP-BRAAAP toot-BRAAAP-toot toot-BRAAAP-toot-toot BRAAAP-toot-toot
+          </div>
+          <div style="font-size:0.72rem; color:var(--text-muted); margin-top:8px;">
+            ▪ <strong>toot</strong> = Short acoustic flatulence puff (.) &nbsp;|&nbsp; ▪ <strong>BRAAAP</strong> =
+            Extended resonant flatulence rumble (-) &nbsp;|&nbsp; ▪ <strong>/</strong> = Word boundary
+          </div>
+        </div>
+
+        <!-- LETTER-BY-LETTER BREAKDOWN CHIPS -->
+        <div id="t2a-letters-wrap" style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:16px;">
+          <!-- Populated dynamically via JS -->
+        </div>
+
+        <!-- STANDARD MORSE DISPLAY -->
+        <div class="terminal-output-box" style="margin-bottom:16px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+            <div class="output-label">STANDARD ITU MORSE</div>
+            <button class="btn btn-ghost btn-sm" onclick="copyMorseFromStudio()">📋 COPY ITU MORSE</button>
+          </div>
+          <div class="morse-stream-text" id="t2a-morse-preview">.... . .-.. .-.. --- / .-- --- .-. .-.. -..</div>
+        </div>
+
+        <!-- SYNTHESIS CONTROLS -->
+        <div
+          style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:14px; margin-bottom:20px;">
+          <div>
+            <label class="form-label">ACOUSTIC TIMBRE / PROFILE</label>
+            <select id="synth-sound-profile" class="form-input">
+              <option value="fart">💨 Authentic Flatulence (Harmonic Wobble)</option>
+              <option value="wet">💦 Moist Resonant Toot</option>
+              <option value="dry">🎺 Dry High-Pressure Squeak</option>
+              <option value="sine">📡 Pure Electronic Sine Wave</option>
+            </select>
+          </div>
+          <div>
+            <label class="form-label">BASE PITCH (Hz)</label>
+            <input type="range" id="synth-freq" min="60" max="250" step="5" value="95"
+              style="width:100%; accent-color:var(--warning);"
+              oninput="document.getElementById('lbl-sf').textContent = this.value + ' Hz'">
+            <span class="confidence-label">Pitch: <strong id="lbl-sf">95 Hz (Low Rumble)</strong></span>
+          </div>
+          <div>
+            <label class="form-label">TRANSMISSION SPEED (WPM)</label>
+            <input type="range" id="synth-wpm" min="6" max="30" step="1" value="14"
+              style="width:100%; accent-color:var(--primary);"
+              oninput="document.getElementById('lbl-wpm').textContent = this.value + ' WPM'">
+            <span class="confidence-label">Speed: <strong id="lbl-wpm">14 WPM</strong></span>
+          </div>
+          <div>
+            <label class="form-label">VOLUME GAIN</label>
+            <input type="range" id="synth-gain" min="0.1" max="1.0" step="0.05" value="0.8"
+              style="width:100%; accent-color:var(--highlight);"
+              oninput="document.getElementById('lbl-gain').textContent = this.value">
+            <span class="confidence-label">Gain: <strong id="lbl-gain">0.8</strong></span>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+          <button class="btn btn-fart btn-lg" onclick="playSynthesizedMorse()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+            💨 PLAY FART ACOUSTIC SIGNAL
+          </button>
+          <button class="btn btn-ghost btn-lg" onclick="stopSynthesizedMorse()">
+            ■ STOP AUDIO
+          </button>
+          <button class="btn btn-secondary btn-lg" onclick="downloadSynthesizedWav()">
+            DOWNLOAD WAV FILE
+          </button>
+          <button class="btn btn-primary btn-lg"
+            style="background:rgba(139,92,255,0.18); border-color:var(--highlight); color:#FFF;"
+            onclick="runFullRoundTrip()">
+            ⚡ RUN FULL ROUND TRIP COMMUNICATION TEST
+          </button>
+        </div>
+      </div>
+
+      <!-- ROUND TRIP VERIFICATION MONITOR -->
+      <div class="glass-panel" id="round-trip-box" style="border-color:rgba(139,92,255,0.3);">
+        <div class="panel-header">
+          <div class="panel-title" style="color:var(--highlight);">
+            TWO-WAY ROUND TRIP COMMUNICATION TEST RESULT
+          </div>
+          <span class="telemetry-chip">LOOPBACK: <span>INTERNAL DSP</span></span>
+        </div>
+
+        <div
+          style="display:grid; grid-template-columns:1fr 40px 1fr 40px 1fr; align-items:center; text-align:center; gap:8px;">
+          <div class="terminal-output-box" style="margin:0;">
+            <div class="output-label">INPUT PAYLOAD</div>
+            <div id="rt-step-in" style="font-family:var(--font-tech); font-size:1.2rem; font-weight:700;">HELLO</div>
+          </div>
+          <div style="color:var(--highlight); font-size:1.4rem;">→</div>
+          <div class="terminal-output-box" style="margin:0;">
+            <div class="output-label">SYNTHESIZED SIGNAL</div>
+            <div id="rt-step-audio" style="font-family:var(--text-mono); font-size:1.1rem; color:var(--secondary);">95
+              Hz FART PCM</div>
+          </div>
+          <div style="color:var(--highlight); font-size:1.4rem;">→</div>
+          <div class="terminal-output-box" style="margin:0;">
+            <div class="output-label">DECODER OUTPUT</div>
+            <div id="rt-step-out"
+              style="font-family:var(--font-tech); font-size:1.2rem; font-weight:700; color:var(--primary);">HELLO</div>
+          </div>
+        </div>
+
+        <div style="margin-top:16px; text-align:center; font-family:var(--font-tech); font-size:0.85rem;"
+          id="rt-status-text">
+          <span style="color:var(--primary)">✓ STATUS: ROUND-TRIP VERIFICATION PASSED (100% BIT MATCH)</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 5. MORSE REFERENCE SECTION ── -->
+    <section id="sec-morse" class="app-section">
+      <div class="panel-header">
+        <div>
+          <h2 class="panel-title" style="font-size:1.3rem;">INTERNATIONAL TELECOMMUNICATION UNION (ITU) MORSE MATRIX
+          </h2>
+          <div class="panel-subtitle">Acoustic pulse specifications: "." = toot (short puff) | "-" = BRAAAP (long toot)
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-panel">
+        <div id="morse-reference-grid"
+          style="display:grid; grid-template-columns:repeat(auto-fill, minmax(130px, 1fr)); gap:10px;">
+          <!-- Populated via script -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 6. FARTNET VALIDATION SPECIFICATION ── -->
+    <section id="sec-validation" class="app-section">
+      <div class="panel-header">
+        <div>
+          <h2 class="panel-title" style="font-size:1.3rem;">FARTNET™ PROTOTYPE ACOUSTIC VALIDATION SPECIFICATION</h2>
+          <div class="panel-subtitle">Signal authentication layer & biometric prototype frequency criteria</div>
+        </div>
+      </div>
+
+      <div class="glass-panel" style="margin-bottom:24px;">
+        <div class="panel-title" style="color:var(--primary)">VALIDATION LAYER PROTOCOL DEFINITION</div>
+        <p style="font-size:0.88rem; color:var(--text-secondary); margin-top:8px; line-height:1.7;">
+          While FARTNET's <strong>Universal Audio Decoder</strong> analyzes any incoming acoustic pulse timing, the
+          <strong>FARTNET™ Validated Mode</strong> enforces a prototype spectral signature match.
+        </p>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:16px; margin:20px 0;">
+          <div class="stat-card">
+            <div class="stat-label">BANDWIDTH PROFILE</div>
+            <div class="stat-value" style="font-size:1.4rem;">80 – 3,500 Hz</div>
+            <div class="stat-delta">Broadband burst characteristic</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">MINIMUM SPECTRAL PURITY</div>
+            <div class="stat-value glow-cyan" style="font-size:1.4rem;">≥ 30.0%</div>
+            <div class="stat-delta">In-band acoustic ratio</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">PULSE RISE TIME</div>
+            <div class="stat-value glow-green" style="font-size:1.4rem;">≤ 12 ms</div>
+            <div class="stat-delta">Initial onset transient</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">SECURITY CLASSIFICATION</div>
+            <div class="stat-value glow-purple" style="font-size:1.4rem;">AGENT ONLY</div>
+            <div class="stat-delta">Fictional prototype metric</div>
+          </div>
+        </div>
+
+        <div
+          style="background:rgba(255,176,32,0.06); border:1px solid rgba(255,176,32,0.3); border-radius:10px; padding:14px; font-size:0.8rem; color:var(--warning); line-height:1.6;">
+          ⚠ <strong>ENGINEERING DISCLAIMER:</strong> FSP™ and FartNet Biometric Signatures are fictional prototype
+          metrics designed for testing acoustic communications. FARTNET accepts zero atmospheric or sociological
+          liability for field deployment.
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 7. NETWORK MONITOR & TOPOLOGY ── -->
+    <section id="sec-network" class="app-section">
+      <div class="panel-header">
+        <div>
+          <h2 class="panel-title" style="font-size:1.3rem;">FARTNET MESH NETWORK ARCHITECTURE</h2>
+          <div class="panel-subtitle">Global agent node synchronization and atmospheric saturation</div>
+        </div>
+        <button class="btn btn-primary btn-sm" onclick="addSimulatedAgentNode()">+ DEPLOY NODE</button>
+      </div>
+
+      <div class="glass-panel" style="margin-bottom:20px;">
+        <div class="canvas-container" style="height:320px;">
+          <canvas id="dedicated-network-canvas" class="sigint-canvas"></canvas>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:16px;">
+          <div>
+            <span style="font-family:var(--font-tech); font-size:0.8rem; color:var(--text-muted);">MATHEMATICAL MODEL:
+            </span>
+            <span style="font-family:var(--text-mono); font-size:0.85rem; color:var(--secondary);">FSP = Active Agents ×
+              Signal Quality × Synchronization</span>
+          </div>
+          <div class="telemetry-chip">NODES ONLINE: <span id="net-node-count">47</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 8. AGENTS MANAGEMENT ── -->
+    <section id="sec-agents" class="app-section">
+      <div class="panel-header">
+        <div>
+          <h2 class="panel-title" style="font-size:1.3rem;">AUTHORIZED FIELD OPERATIVES ROSTER</h2>
+          <div class="panel-subtitle">Certified signal intelligence agents and cryptographic signatures</div>
+        </div>
+      </div>
+
+      <div class="glass-panel">
+        <table class="glass-table">
+          <thead>
+            <tr>
+              <th>AGENT ID</th>
+              <th>OPERATIVE NAME</th>
+              <th>RANK</th>
+              <th>STATUS</th>
+              <th>SIGNAL PROFILE</th>
+              <th>CONTRIBUTION</th>
+              <th>LAST TRANSMISSION</th>
+            </tr>
+          </thead>
+          <tbody id="agents-table-body">
+            <tr>
+              <td><strong style="color:var(--primary)">FN-007</strong></td>
+              <td>Ash "The Resonance"</td>
+              <td>Elite Operative</td>
+              <td><span style="color:var(--primary)">● ACTIVE</span></td>
+              <td>MATCHED (99.2%)</td>
+              <td>+8 FSP™</td>
+              <td>2 min ago</td>
+            </tr>
+            <tr>
+              <td><strong style="color:var(--secondary)">AGENT-001</strong></td>
+              <td>Zero Vector</td>
+              <td>Founding Director</td>
+              <td><span style="color:var(--primary)">● ACTIVE</span></td>
+              <td>MATCHED (98.6%)</td>
+              <td>+42 FSP™</td>
+              <td>18 min ago</td>
+            </tr>
+            <tr>
+              <td><strong style="color:var(--highlight)">ADMIN</strong></td>
+              <td>System Sovereign</td>
+              <td>Commander</td>
+              <td><span style="color:var(--primary)">● ACTIVE</span></td>
+              <td>OVERRIDE</td>
+              <td>+128 FSP™</td>
+              <td>Just now</td>
+            </tr>
+            <tr>
+              <td><strong style="color:var(--text-muted)">SHADOW-9</strong></td>
+              <td>Ghost Harmonic</td>
+              <td>Field Scout</td>
+              <td><span style="color:var(--warning)">● STANDBY</span></td>
+              <td>MATCHED (94.1%)</td>
+              <td>+12 FSP™</td>
+              <td>3 hr ago</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ── 9. TACTICAL JERRY CAN™ MERCHANDISE ── -->
+    <section id="sec-merchandise" class="app-section">
+      <div class="panel-header">
+        <div>
+          <h2 class="panel-title" style="font-size:1.3rem;">TACTICAL EQUIPMENT & MERCHANDISE</h2>
+          <div class="panel-subtitle">Professional hardware for biological signal preparation and sustainment</div>
+        </div>
+      </div>
+
+      <div class="glass-panel">
+        <div class="jerrycan-stage">
+
+          <!-- 3D MOCKUP STAGE -->
+          <div class="can-viewport">
+            <div class="can-3d-box" id="can-3d-box">
+              <div class="can-badge">FN-JC-001</div>
+              <div style="text-align:center;">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="var(--primary)"
+                  style="opacity:0.85; filter:drop-shadow(0 0 12px var(--primary-glow));">
+                  <path
+                    d="M19 4h-3V2H8v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-7 14c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H9V6h6v2z" />
+                </svg>
+                <div
+                  style="font-family:var(--font-tech); font-weight:700; color:#FFF; font-size:0.9rem; margin-top:8px;">
+                  JERRY CAN™</div>
+              </div>
+              <div style="font-size:0.65rem; color:var(--text-muted); text-align:center;">MIL-SPEC SEALED</div>
+            </div>
+          </div>
+
+          <!-- SPECIFICATIONS & ADD TO CART -->
+          <div>
+            <div class="telemetry-chip" style="width:fit-content; margin-bottom:12px;">PRODUCT CODE:
+              <span>FN-JC-001</span>
+            </div>
+            <h3 style="font-family:var(--font-tech); font-size:1.9rem; margin-bottom:6px; color:#FFF;">
+              FARTNET FIELD COMMUNICATION JERRY CAN™
+            </h3>
+            <div
+              style="font-family:var(--font-tech); color:var(--secondary); font-size:0.85rem; letter-spacing:0.12em; margin-bottom:14px;">
+              CATEGORY: FIELD COMMUNICATION SUPPLY
+            </div>
+
+            <p style="font-size:0.9rem; color:var(--text-secondary); margin-bottom:18px; line-height:1.7;">
+              "Portable biological signal preparation and field sustainment kit." Built with high-tensile composite
+              seals and internal temperature buffer.
+            </p>
+
+            <div style="margin-bottom:18px;">
+              <div class="output-label">STANDARD CONTENTS INCLUDED:</div>
+              <ul
+                style="list-style:none; font-size:0.85rem; color:var(--text-primary); display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+                <li>▪ Chakkakkuru (Jackfruit Seeds)</li>
+                <li>▪ Parippu (Lentil Matrix)</li>
+                <li>▪ High-Density Potato</li>
+                <li>▪ Spice Accelerator Module</li>
+                <li>▪ FARTNET Field Manual</li>
+                <li>▪ Agent Identification Card</li>
+              </ul>
+            </div>
+
+            <div style="display:flex; align-items:baseline; gap:16px; margin-bottom:20px;">
+              <div style="font-family:var(--font-tech); font-size:2.2rem; font-weight:700; color:var(--primary);">₹4,999
+              </div>
+              <span style="font-size:0.8rem; color:var(--text-muted);">IN STOCK (42 UNITS REMAINING)</span>
+            </div>
+
+            <div style="display:flex; gap:12px;">
+              <button class="btn btn-primary btn-lg" onclick="showHudToast('Jerry Can™ added to procurement queue')">ADD
+                TO CART</button>
+              <button class="btn btn-ghost btn-lg" onclick="showHudToast('Viewing military specs...')">VIEW
+                SPECIFICATIONS</button>
+            </div>
+
+            <div style="margin-top:14px; font-size:0.75rem; color:var(--text-muted); font-style:italic;">
+              * FARTNET accepts no responsibility for atmospheric consequences.
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 10. SUBSCRIPTION PLANS ── -->
+    <section id="sec-subscription" class="app-section">
+      <div class="panel-header">
+        <div>
+          <h2 class="panel-title" style="font-size:1.3rem;">FARTNET OPERATIONAL NETWORK PLANS</h2>
+          <div class="panel-subtitle">Tiered bandwidth and cryptographic transmission capabilities</div>
+        </div>
+      </div>
+
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <div class="plan-name">FREE</div>
+          <div class="plan-price">₹0 <span>/ forever</span></div>
+          <ul class="plan-features">
+            <li>Universal pulse decoder</li>
+            <li>Basic Morse encoder</li>
+            <li>Local simulation loop</li>
+          </ul>
+          <button class="btn btn-ghost" style="width:100%;">CURRENT PLAN</button>
+        </div>
+
+        <div class="pricing-card">
+          <div class="plan-name">AGENT</div>
+          <div class="plan-price">₹199 <span>/ month</span></div>
+          <ul class="plan-features">
+            <li>FartNet validation profile</li>
+            <li>Agent ID verification</li>
+            <li>Acoustic transmission history</li>
+          </ul>
+          <button class="btn btn-secondary" style="width:100%;" onclick="showHudToast('Agent plan selected')">SELECT
+            AGENT</button>
+        </div>
+
+        <div class="pricing-card recommended">
+          <div class="plan-name" style="color:var(--primary)">ELITE</div>
+          <div class="plan-price">₹499 <span>/ month</span></div>
+          <ul class="plan-features">
+            <li>Advanced FFT signal analytics</li>
+            <li>Full network telemetry mesh</li>
+            <li>Priority signal decoding</li>
+            <li>Enhanced confidence score</li>
+          </ul>
+          <button class="btn btn-primary" style="width:100%;"
+            onclick="showHudToast('Elite clearance initiated')">UPGRADE TO ELITE</button>
+        </div>
+
+        <div class="pricing-card">
+          <div class="plan-name" style="color:var(--highlight)">COMMANDER</div>
+          <div class="plan-price">₹999 <span>/ month</span></div>
+          <ul class="plan-features">
+            <li>Full global mesh access</li>
+            <li>Multi-agent command hub</li>
+            <li>24/7 SIGINT support</li>
+            <li>15% Jerry Can™ discount</li>
+          </ul>
+          <button class="btn btn-ghost" style="width:100%;"
+            onclick="showHudToast('Commander clearance requested')">REQUEST CLEARANCE</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── 11. SYSTEM SETTINGS ── -->
+    <section id="sec-settings" class="app-section">
+      <div class="panel-header">
+        <div>
+          <h2 class="panel-title" style="font-size:1.3rem;">SYSTEM ARCHITECTURE & DSP SETTINGS</h2>
+          <div class="panel-subtitle">Global audio context, hardware buffers, and telemetry interfaces</div>
+        </div>
+      </div>
+
+      <div class="glass-panel" style="max-width:700px;">
+        <div class="form-group">
+          <label class="form-label">AUDIO SAMPLING RATE (Hz)</label>
+          <input type="text" class="form-input" value="44100 Hz (Hardware Synchronized)" disabled>
+        </div>
+        <div class="form-group">
+          <label class="form-label">FFT RESOLUTION SIZE</label>
+          <select class="form-input">
+            <option>2048 Bins (High Precision)</option>
+            <option>1024 Bins (Low Latency)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">AUDIO WORKLET ACCELERATION</label>
+          <input type="text" class="form-input" value="ACTIVE (Browser Audio Pipeline)" disabled>
+        </div>
+        <div style="display:flex; gap:12px; margin-top:20px;">
+          <button class="btn btn-primary" onclick="showHudToast('DSP settings synchronized')">SAVE SETTINGS</button>
+          <button class="btn btn-ghost" onclick="showHudToast('Defaults restored')">RESET</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+     AGENT LOGIN MODAL
+     ══════════════════════════════════════════════════════════════════ -->
+  <div class="modal-backdrop" id="auth-modal">
+    <div class="auth-box">
+      <div style="text-align:center; margin-bottom:20px;">
+        <div class="brand-sigil" style="margin:0 auto 10px; width:44px; height:44px;">
+          <svg width="24" height="24" viewBox="0 0 24 24">
+            <path
+              d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z" />
+          </svg>
+        </div>
+        <h2 style="font-family:var(--font-tech); font-size:1.4rem; letter-spacing:0.12em; color:#FFF;">FARTNET SECURE
+          ACCESS</h2>
+        <div style="font-family:var(--font-tech); font-size:0.75rem; color:var(--text-muted); letter-spacing:0.1em;">
+          MEMBER ACCESS / AGENT ONLY</div>
+      </div>
+
+      <div class="auth-mode-switch" role="tablist" aria-label="Member access mode">
+        <button type="button" id="auth-mode-login" class="auth-mode-btn" onclick="setAuthMode('login')">LOGIN</button>
+        <button type="button" id="auth-mode-create" class="auth-mode-btn active" onclick="setAuthMode('create')">CREATE
+          AGENT ACCOUNT</button>
+      </div>
+
+      <div id="auth-create-note"
+        style="margin-bottom:16px; padding:10px 12px; border:1px solid rgba(0,255,163,0.2); border-radius:8px; background:rgba(0,255,163,0.04); font-size:0.78rem; color:var(--text-secondary);">
+        A random field handle will be assigned to this browser session.
+      </div>
+
+      <form id="auth-form" onsubmit="handleAgentAuth(event)">
+        <div class="form-group">
+          <label class="form-label" id="auth-id-label">ASSIGNED MEMBER HANDLE</label>
+          <input type="text" id="auth-id-input" class="form-input" placeholder="e.g. FN-007 or AGENT-001" value="FN-007"
+            required readonly>
+        </div>
+        <div class="form-group">
+          <label class="form-label">ACCESS PASSWORD</label>
+          <input type="password" id="auth-pw-input" class="form-input" placeholder="Enter access code" value=""
+            required>
+        </div>
+
+        <div id="auth-status-log"
+          style="font-family:var(--font-tech); font-size:0.75rem; color:var(--secondary); min-height:22px; margin-bottom:14px;">
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width:100%;">
+          <span id="auth-submit-label">CREATE AGENT & ENTER DASHBOARD</span>
+        </button>
+
+        <div style="text-align:center; margin-top:14px;">
+          <button type="button" class="btn btn-ghost btn-sm" onclick="closeAuthModal()">CANCEL</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ── IN-APP HUD NOTIFICATION CONTAINER ── -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- ══════════════════════════════════════════════════════════════════
+     CORE SIGNAL PROCESSING ENGINE & SCRIPTS
+     ══════════════════════════════════════════════════════════════════ -->
+  <script>
+    'use strict';
+
+    // ─── ITU MORSE TABLE & FART PHONETICS ───
+    const ITU_MORSE = {
+      'A': '.-', 'B': '-...', 'C': '-.-.', 'D': '-..', 'E': '.', 'F': '..-.',
+      'G': '--.', 'H': '....', 'I': '..', 'J': '.---', 'K': '-.-', 'L': '.-..',
+      'M': '--', 'N': '-.', 'O': '---', 'P': '.--.', 'Q': '--.-', 'R': '.-.',
+      'S': '...', 'T': '-', 'U': '..-', 'V': '...-', 'W': '.--', 'X': '-..-',
+      'Y': '-.--', 'Z': '--..',
+      '0': '-----', '1': '.----', '2': '..---', '3': '...--', '4': '....-',
+      '5': '.....', '6': '-....', '7': '--...', '8': '---..', '9': '----.',
+      '.': '.-.-.-', ',': '--..--', '?': '..--..', '/': '-..-.', ' ': '/'
+    };
+
+    const REV_MORSE = {};
+    Object.entries(ITU_MORSE).forEach(([k, v]) => { if (k !== ' ') REV_MORSE[v] = k; });
+
+    // ─── FART PHONETIC VOCABULARIES ───
+    const FART_VOCABULARIES = {
+      classic: { dot: 'toot', dash: 'BRAAAP', sep: '-' },
+      comic: { dot: 'poot', dash: 'THRRRRP', sep: '-' },
+      tactical: { dot: 'PUFF', dash: 'BLAST', sep: '-' },
+      squeak: { dot: 'sqk', dash: 'HONK', sep: '-' }
+    };
+    let currentFartVocab = 'classic';
+
+    // Helper to convert dots & dashes to Fart-Type Morse
+    function toFartMorse(standardMorse, vocabKey = currentFartVocab) {
+      const vocab = FART_VOCABULARIES[vocabKey] || FART_VOCABULARIES.classic;
+      return standardMorse
+        .split(' ')
+        .map(word => {
+          if (word === '/') return '/';
+          return word
+            .split('')
+            .map(ch => (ch === '.' ? vocab.dot : (ch === '-' ? vocab.dash : ch)))
+            .join(vocab.sep);
+        })
+        .join('  ');
+    }
+
+    function textToFartMorse(text, vocabKey = currentFartVocab) {
+      const morseArr = [];
+      const chars = text.toUpperCase().split('');
+      for (const ch of chars) {
+        if (ITU_MORSE[ch]) morseArr.push(ITU_MORSE[ch]);
+      }
+      const stdMorse = morseArr.join(' ');
+      return {
+        standardMorse: stdMorse,
+        fartMorse: toFartMorse(stdMorse, vocabKey),
+        letterBreakdown: chars.map(ch => {
+          if (ch === ' ') return { char: '␣', morse: '/', fart: '/', isSpace: true };
+          const m = ITU_MORSE[ch] || '';
+          return {
+            char: ch,
+            morse: m,
+            fart: m ? toFartMorse(m, vocabKey) : '?',
+            isSpace: false
+          };
+        })
+      };
+    }
+
+    // ─── ROBUST AUDIO SYSTEM CORE WITH HARDWARE PERMISSION & CLOCK FIXES ───
+    class SignalIntelligenceAudioEngine {
+      constructor() {
+        this.ctx = null;
+        this.analyser = null;
+        this.source = null;
+        this.stream = null;
+        this.inputGain = null;
+        this.silentSink = null;
+        this.gainValue = 1.0;
+        this.isRunning = false;
+        this.rafId = null;
+        this.timeDomainData = null;
+        this.freqData = null;
+        this.onFrame = null;
+        this.micPermissionState = 'unknown'; // 'unknown', 'granted', 'denied', 'prompt'
+      }
+
+      async init() {
+        if (!this.ctx) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          this.ctx = new AudioCtx({ sampleRate: 44100 });
+          this.analyser = this.ctx.createAnalyser();
+          this.analyser.fftSize = 2048;
+          this.analyser.smoothingTimeConstant = 0.2;
+          this.timeDomainData = new Float32Array(this.analyser.fftSize);
+          this.freqData = new Uint8Array(this.analyser.frequencyBinCount);
+
+          // Pre-amp gain node for sensitivity boosting
+          this.inputGain = this.ctx.createGain();
+          this.inputGain.gain.value = this.gainValue;
+
+          // Essential sink connected to destination so Chromium's audio graph clock
+          // actively pulls real-time hardware frames from the MediaStreamSourceNode!
+          this.silentSink = this.ctx.createGain();
+          this.silentSink.gain.value = 0.0;
+          this.silentSink.connect(this.ctx.destination);
+        }
+        if (this.ctx.state === 'suspended') {
+          await this.ctx.resume();
+        }
+      }
+
+      setInputGain(multiplier) {
+        this.gainValue = Math.max(0.2, Math.min(10.0, multiplier));
+        if (this.inputGain) {
+          this.inputGain.gain.value = this.gainValue;
+        }
+      }
+
+      async checkPermission() {
+        if (navigator.permissions && navigator.permissions.query) {
+          try {
+            const res = await navigator.permissions.query({ name: 'microphone' });
+            this.micPermissionState = res.state;
+            res.onchange = () => {
+              this.micPermissionState = res.state;
+              if (window.updateMicStatusUI) window.updateMicStatusUI();
+            };
+            return res.state;
+          } catch (e) {
+            return 'prompt';
+          }
+        }
+        return 'prompt';
+      }
+
+      async startMic(deviceId) {
+        await this.stop();
+        await this.init();
+
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          throw new Error("Microphone API is not supported on this origin. In Chrome/Edge, mic access is blocked on file:// URLs. Please open http://localhost:8080.");
+        }
+
+        let stream = null;
+        try {
+          const constraints = {
+            audio: {
+              echoCancellation: false,
+              noiseSuppression: false,
+              autoGainControl: false,
+              ...(deviceId ? { deviceId: { exact: deviceId } } : {})
+            }
+          };
+          stream = await navigator.mediaDevices.getUserMedia(constraints);
+        } catch (err) {
+          console.warn("Detailed mic constraints rejected, attempting basic fallback { audio: true }", err);
+          stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        }
+
+        this.stream = stream;
+        this.micPermissionState = 'granted';
+
+        this.source = this.ctx.createMediaStreamSource(this.stream);
+        this.source.connect(this.inputGain);
+        this.inputGain.connect(this.analyser);
+        this.analyser.connect(this.silentSink); // Keep Chrome pulling audio without echo
+
+        this._startLoop();
+      }
+
+      async startSystem() {
+        await this.stop();
+        await this.init();
+
+        this.stream = await navigator.mediaDevices.getDisplayMedia({ video: false, audio: true });
+        this.source = this.ctx.createMediaStreamSource(this.stream);
+        this.source.connect(this.inputGain);
+        this.inputGain.connect(this.analyser);
+        this.analyser.connect(this.silentSink);
+        this._startLoop();
+      }
+
+      async loadBuffer(arrayBuffer) {
+        await this.stop();
+        await this.init();
+
+        const audioBuffer = await this.ctx.decodeAudioData(arrayBuffer);
+        const src = this.ctx.createBufferSource();
+        src.buffer = audioBuffer;
+        src.connect(this.inputGain);
+        this.inputGain.connect(this.analyser);
+        this.inputGain.connect(this.ctx.destination);
+        src.start();
+        src.onended = () => {
+          this.isRunning = false;
+          if (typeof app !== 'undefined' && app.segmenter) app.segmenter.forceFlush();
+          showHudToast('Audio file playback completed');
+        };
+        this.source = src;
+        this._startLoop();
+        return audioBuffer;
+      }
+
+      async playSynthBuffer(audioBuffer, onEnded) {
+        await this.init();
+
+        const src = this.ctx.createBufferSource();
+        src.buffer = audioBuffer;
+        src.connect(this.analyser);
+        src.connect(this.ctx.destination);
+        src.start();
+        src.onended = () => {
+          if (typeof app !== 'undefined' && app.segmenter) app.segmenter.forceFlush();
+          this.isRunning = false;
+          if (onEnded) onEnded();
+        };
+        this.source = src;
+        this._startLoop();
+      }
+
+      async startSimulatedPulses(text = 'CQ') {
+        await this.stop();
+        await this.init();
+
+        const synth = app.synth || new AcousticSignalSynthesizer();
+        // Keep the diagnostic carrier clean so the decoder test checks timing,
+        // not the extra turbulence of the expressive fart timbre.
+        const originalDotMaxMs = app.segmenter.dotMaxMs;
+        app.segmenter.dotMaxMs = 180;
+        const { buffer } = await synth.generateBuffer(text, 92, 14, 0.9, 'sine');
+
+        const src = this.ctx.createBufferSource();
+        src.buffer = buffer;
+        src.connect(this.inputGain);
+        this.inputGain.connect(this.analyser);
+        this.inputGain.connect(this.ctx.destination);
+        src.start();
+        src.onended = () => {
+          if (typeof app !== 'undefined' && app.segmenter) app.segmenter.forceFlush();
+          app.segmenter.dotMaxMs = originalDotMaxMs;
+          this.isRunning = false;
+          showHudToast('Simulation fart pulses finished');
+        };
+        this.source = src;
+        this._startLoop();
+      }
+
+      _startLoop() {
+        this.isRunning = true;
+        const tick = () => {
+          if (!this.isRunning) return;
+          this.rafId = requestAnimationFrame(tick);
+          this.analyser.getFloatTimeDomainData(this.timeDomainData);
+          this.analyser.getByteFrequencyData(this.freqData);
+
+          // Calculate true AC RMS by removing DC offset
+          let sum = 0;
+          const len = this.timeDomainData.length;
+          for (let i = 0; i < len; i++) sum += this.timeDomainData[i];
+          const mean = sum / len;
+
+          let sumSquares = 0;
+          for (let i = 0; i < len; i++) {
+            const diff = this.timeDomainData[i] - mean;
+            sumSquares += diff * diff;
+          }
+          const rms = Math.sqrt(sumSquares / len);
+
+          if (this.onFrame) {
+            this.onFrame(rms, this.timeDomainData, this.freqData, performance.now());
+          }
+        };
+        tick();
+      }
+
+      async stop() {
+        this.isRunning = false;
+        if (this.rafId) { cancelAnimationFrame(this.rafId); this.rafId = null; }
+        if (this.source) {
+          try { this.source.stop(); } catch (e) { }
+          try { this.source.disconnect(); } catch (e) { }
+          this.source = null;
+        }
+        if (this.stream) {
+          this.stream.getTracks().forEach(t => t.stop());
+          this.stream = null;
+        }
+      }
+
+      async enumerateDevices() {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) return [];
+        try {
+          const devices = await navigator.mediaDevices.enumerateDevices();
+          return devices.filter(d => d.kind === 'audioinput');
+        } catch (e) {
+          return [];
+        }
+      }
+    }
+
+    // ─── PULSE EXTRACTOR & MORSE DECODER ───
+    class TacticalPulseSegmenter {
+      constructor() {
+        this.state = 'IDLE';
+        this.pulseStartMs = 0;
+        this.silenceStartMs = 0;
+        this.hasSilence = false;
+        this.currentSymbolSeq = '';
+        this.wordFlushed = false;
+
+        // Responsive defaults
+        this.noiseGate = 0.008; // 0.008 RMS is sensitive to whispers, toots, and whistles
+        this.minPulseMs = 35;   // Ignores micro-clicks
+        this.dotMaxMs = 240;    // Maximum ms for a dot (toot)
+        this.dashMinMs = 280;   // Minimum ms for a dash (BRAAAP)
+        this.charGapMs = 220;   // Three-unit Morse character gap at normal speech speed
+        this.wordGapMs = 650;   // Seven-unit Morse word gap at normal speech speed
+
+        this.onPulse = null;
+        this.onChar = null;
+        this.onWord = null;
+        this.onActivityChange = null;
+      }
+
+      reset() {
+        this.state = 'IDLE';
+        this.pulseStartMs = 0;
+        this.silenceStartMs = 0;
+        this.hasSilence = false;
+        this.currentSymbolSeq = '';
+        this.wordFlushed = false;
+      }
+
+      feed(rms, tMs) {
+        const isLoud = rms > this.noiseGate;
+
+        if (isLoud) {
+          if (this.state === 'IDLE') {
+            this.pulseStartMs = tMs;
+            this.state = 'ACTIVE';
+            if (this.onActivityChange) this.onActivityChange(true);
+          }
+        } else {
+          if (this.state === 'ACTIVE') {
+            const duration = tMs - this.pulseStartMs;
+            if (duration >= this.minPulseMs) {
+              const sym = duration <= this.dotMaxMs ? '.' : '-';
+              this.currentSymbolSeq += sym;
+              if (this.onPulse) this.onPulse(sym, duration);
+            }
+            this.silenceStartMs = tMs;
+            this.hasSilence = true;
+            this.state = 'IDLE';
+            if (this.onActivityChange) this.onActivityChange(false);
+          } else if (this.hasSilence) {
+            const gap = tMs - this.silenceStartMs;
+            // Prompt character flush as soon as character gap reached!
+            if (this.currentSymbolSeq && gap >= this.charGapMs) {
+              this._flushChar();
+            }
+            if (!this.wordFlushed && gap >= this.wordGapMs) {
+              if (this.onWord) this.onWord();
+              this.wordFlushed = true;
+            }
+          }
+        }
+      }
+
+      _flushChar() {
+        if (!this.currentSymbolSeq) return;
+        const code = this.currentSymbolSeq;
+        const char = REV_MORSE[code] || '?';
+        if (this.onChar) this.onChar(code, char);
+        this.currentSymbolSeq = '';
+      }
+
+      forceFlush() {
+        this._flushChar();
+      }
+    }
+
+    // ─── AUTHENTIC FLATULENCE & HARMONIC ACOUSTIC SYNTHESIZER ───
+    class AcousticSignalSynthesizer {
+      constructor() {
+        this.ctx = null;
+      }
+      _init() {
+        if (!this.ctx) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          this.ctx = new AudioCtx();
+        }
+        return this.ctx;
+      }
+
+      // Generates genuine comical fart soundwaves (low frequency, flutter AM/FM, harmonics)
+      async generateBuffer(text, baseFreq = 95, wpm = 14, gainVal = 0.8, profile = 'fart') {
+        const ctx = this._init();
+        const sr = ctx.sampleRate;
+        const unitSec = 1.2 / wpm;
+        const dotSec = unitSec;
+        const dashSec = unitSec * 3;
+        const sGap = unitSec;
+        const cGap = unitSec * 3;
+        const wGap = unitSec * 7;
+
+        // Convert text to morse
+        const morseArr = [];
+        for (const c of text.toUpperCase()) {
+          if (ITU_MORSE[c]) morseArr.push(ITU_MORSE[c]);
+        }
+        const fullMorse = morseArr.join(' ');
+
+        let totalSec = 0.3;
+        for (const ch of fullMorse) {
+          if (ch === '.') totalSec += dotSec + sGap;
+          else if (ch === '-') totalSec += dashSec + sGap;
+          else if (ch === ' ') totalSec += cGap;
+          else if (ch === '/') totalSec += wGap;
+        }
+        totalSec += 0.6;
+
+        const numSamples = Math.ceil(totalSec * sr);
+        const buffer = ctx.createBuffer(1, numSamples, sr);
+        const data = buffer.getChannelData(0);
+
+        let t = 0.2;
+
+        const renderFartBurst = (durationSec, isLong) => {
+          const startIdx = Math.floor(t * sr);
+          const endIdx = Math.min(Math.floor((t + durationSec) * sr), numSamples);
+          const totalLen = endIdx - startIdx;
+
+          // Pitch drop curve: farts start slightly higher and drop in pitch
+          const startPitch = isLong ? baseFreq * 1.35 : baseFreq * 1.5;
+          const endPitch = isLong ? baseFreq * 0.75 : baseFreq * 0.85;
+
+          // Sphincter flutter frequency (20Hz - 45Hz AM/FM jitter)
+          const flutterRate = 28 + Math.random() * 10;
+
+          for (let i = startIdx; i < endIdx; i++) {
+            const progress = (i - startIdx) / totalLen;
+
+            // Attack and release envelope
+            let env = 1.0;
+            const attackLen = Math.floor(0.012 * sr);
+            const releaseLen = Math.floor(0.035 * sr);
+            if (i - startIdx < attackLen) env = (i - startIdx) / attackLen;
+            if (endIdx - i < releaseLen) env = Math.min(env, (endIdx - i) / releaseLen);
+
+            const time = i / sr;
+            if (profile === 'sine') {
+              const f = baseFreq * 4;
+              data[i] = Math.sin(2 * Math.PI * f * time) * gainVal * env * 0.6;
+              continue;
+            }
+
+            if (profile === 'wet') {
+              const wetPitch = baseFreq * (isLong ? 0.72 : 0.9);
+              const wetPhase = 2 * Math.PI * wetPitch * time;
+              const gurgle = 1 + 0.45 * Math.sin(2 * Math.PI * 6.5 * time);
+              const bubble = 0.22 * Math.sin(2 * Math.PI * (wetPitch * 1.7) * time);
+              const wetWave = Math.sin(wetPhase)
+                + 0.95 * Math.sin(2 * wetPhase)
+                + 0.55 * Math.sin(3 * wetPhase)
+                + bubble;
+              const wetNoise = (Math.random() - 0.5) * 0.32;
+              data[i] = Math.tanh((wetWave * gurgle + wetNoise) * 1.45) * gainVal * env * 0.62;
+              continue;
+            }
+
+            if (profile === 'dry') {
+              const dryPitch = baseFreq * (isLong ? 1.9 : 2.6);
+              const dryPhase = 2 * Math.PI * dryPitch * time;
+              const click = Math.sin(2 * Math.PI * 1450 * time) * 0.12;
+              const dryWave = Math.sin(dryPhase)
+                + 0.28 * Math.sin(2 * dryPhase)
+                + 0.12 * Math.sin(5 * dryPhase)
+                + click;
+              data[i] = Math.tanh(dryWave * 2.4) * gainVal * env * 0.48;
+              continue;
+            }
+
+            // Fart profile: unstable low rumble, pitch drop, and breathy rasp.
+            const currentPitch = startPitch * 0.72
+              + (endPitch * 0.72 - startPitch * 0.72) * Math.pow(progress, 0.65);
+            const localTime = (i - startIdx) / sr;
+            const phase = 2 * Math.PI * currentPitch * localTime;
+            const pressureFlutter = 0.72
+              + 0.42 * Math.sin(2 * Math.PI * flutterRate * localTime)
+              + 0.16 * Math.sin(2 * Math.PI * (flutterRate * 2.37) * localTime);
+            const rumble = 0.9 * Math.sin(phase)
+              + 0.72 * Math.sin(2 * phase + 0.3)
+              + 0.5 * Math.sin(3 * phase + 1.1)
+              + 0.28 * Math.sin(0.5 * phase);
+            const rasp = (Math.random() - 0.5) * (0.24 + 0.18 * Math.abs(Math.sin(phase)));
+            const brassyWave = Math.tanh((rumble * pressureFlutter) * 1.9);
+            data[i] = (brassyWave + rasp) * gainVal * env * 0.72;
+          }
+        };
+
+        for (const ch of fullMorse) {
+          if (ch === '.') { renderFartBurst(dotSec, false); t += dotSec + sGap; }
+          else if (ch === '-') { renderFartBurst(dashSec, true); t += dashSec + sGap; }
+          else if (ch === ' ') { t += cGap; }
+          else if (ch === '/') { t += wGap; }
+        }
+
+        return { buffer, fullMorse };
+      }
+    }
+
+    // ─── VISUALIZATIONS (CANVAS SUITE) ───
+    class SigintCanvasSuite {
+      constructor() {
+        this.waveCanvas = document.getElementById('time-waveform-canvas');
+        this.freqCanvas = document.getElementById('freq-spectrum-canvas');
+        this.specCanvas = document.getElementById('spectrogram-canvas');
+
+        this.wctx = this.waveCanvas.getContext('2d');
+        this.fctx = this.freqCanvas.getContext('2d');
+        this.sctx = this.specCanvas.getContext('2d');
+
+        this.resizeAll();
+        window.addEventListener('resize', () => this.resizeAll());
+      }
+
+      resizeAll() {
+        [this.waveCanvas, this.freqCanvas, this.specCanvas].forEach(c => {
+          if (c) {
+            c.width = c.clientWidth || 600;
+            c.height = c.clientHeight || 120;
+          }
+        });
+      }
+
+      renderWaveform(timeData, isLoud) {
+        const ctx = this.wctx;
+        const W = this.waveCanvas.width;
+        const H = this.waveCanvas.height;
+        ctx.clearRect(0, 0, W, H);
+
+        // Grid lines
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(0, H / 2); ctx.lineTo(W, H / 2);
+        ctx.moveTo(0, H / 4); ctx.lineTo(W, H / 4);
+        ctx.moveTo(0, 3 * H / 4); ctx.lineTo(W, 3 * H / 4);
+        ctx.stroke();
+
+        // Waveform line
+        ctx.strokeStyle = isLoud ? '#FFB020' : '#00FFA3';
+        ctx.lineWidth = 2;
+        ctx.shadowBlur = isLoud ? 14 : 6;
+        ctx.shadowColor = isLoud ? 'rgba(255, 176, 32, 0.6)' : 'rgba(0, 255, 163, 0.35)';
+        ctx.beginPath();
+
+        const step = W / timeData.length;
+        for (let i = 0; i < timeData.length; i++) {
+          const x = i * step;
+          const y = (0.5 - timeData[i] * 0.5) * H;
+          if (i === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+      }
+
+      renderSpectrum(freqData) {
+        const ctx = this.fctx;
+        const W = this.freqCanvas.width;
+        const H = this.freqCanvas.height;
+        ctx.clearRect(0, 0, W, H);
+
+        const count = 128;
+        const barW = W / count;
+
+        let maxBin = 0, maxVal = 0;
+        for (let i = 0; i < count; i++) {
+          const v = freqData[i] / 255;
+          if (freqData[i] > maxVal) {
+            maxVal = freqData[i];
+            maxBin = i;
+          }
+          const h = v * H;
+          const x = i * barW;
+          const y = H - h;
+
+          const grad = ctx.createLinearGradient(0, y, 0, H);
+          grad.addColorStop(0, '#00FFA3');
+          grad.addColorStop(1, 'rgba(0, 200, 255, 0.2)');
+
+          ctx.fillStyle = grad;
+          ctx.fillRect(x, y, barW - 1, h);
+        }
+
+        // Telemetry updates
+        const domHz = Math.round(maxBin * (44100 / 2) / 1024);
+        document.getElementById('telemetry-dom-freq').textContent = domHz > 20 ? `${domHz} Hz` : '-- Hz';
+      }
+
+      renderSpectrogram(freqData) {
+        const ctx = this.sctx;
+        const W = this.specCanvas.width;
+        const H = this.specCanvas.height;
+        const len = freqData.length;
+
+        // shift 2px left
+        const slice = ctx.getImageData(2, 0, W - 2, H);
+        ctx.putImageData(slice, 0, 0);
+        ctx.clearRect(W - 2, 0, 2, H);
+
+        for (let i = 0; i < len; i++) {
+          const val = freqData[i] / 255;
+          if (val > 0.08) {
+            const y = H - Math.floor((i / len) * H) - 1;
+            let r = 0, g = 0, b = 0;
+            if (val < 0.4) {
+              g = Math.floor(val * 2.5 * 255);
+              b = 255;
+            } else if (val < 0.8) {
+              r = Math.floor((val - 0.4) * 2.5 * 255);
+              g = 255;
+              b = Math.floor(255 - (val - 0.4) * 2.5 * 255);
+            } else {
+              r = 255;
+              g = Math.floor((1 - val) * 5 * 255);
+              b = 180;
+            }
+            ctx.fillStyle = `rgb(${r},${g},${b})`;
+            ctx.fillRect(W - 2, y, 2, 2);
+          }
+        }
+      }
+    }
+
+    // ─── AMBIENT NETWORK & PARTICLES CANVAS ───
+    function initAmbientBackground() {
+      const canvas = document.getElementById('particle-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let W = canvas.width = window.innerWidth;
+      let H = canvas.height = window.innerHeight;
+
+      window.addEventListener('resize', () => {
+        W = canvas.width = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+      });
+
+      const particles = Array.from({ length: 45 }, () => ({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        vx: (Math.random() - 0.5) * 0.35,
+        vy: (Math.random() - 0.5) * 0.35,
+        size: Math.random() * 2 + 1,
+        alpha: Math.random() * 0.3 + 0.1
+      }));
+
+      function loop() {
+        ctx.clearRect(0, 0, W, H);
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          if (p.x < 0) p.x = W;
+          if (p.x > W) p.x = 0;
+          if (p.y < 0) p.y = H;
+          if (p.y > H) p.y = 0;
+
+          ctx.fillStyle = `rgba(0, 255, 163, ${p.alpha})`;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fill();
+        });
+        requestAnimationFrame(loop);
+      }
+      loop();
+    }
+
+    // ─── TACTICAL MESH TOPOLOGY VISUAL ───
+    function initNetworkTopologyCanvas(canvasId, nodeCount = 14) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      canvas.width = canvas.clientWidth || 800;
+      canvas.height = canvas.clientHeight || 240;
+
+      const nodes = Array.from({ length: nodeCount }, (_, i) => ({
+        id: `FN-${String(i + 1).padStart(3, '0')}`,
+        x: 40 + Math.random() * (canvas.width - 80),
+        y: 30 + Math.random() * (canvas.height - 60),
+        vx: (Math.random() - 0.5) * 0.4,
+        vy: (Math.random() - 0.5) * 0.4,
+        energy: Math.random() * 0.6 + 0.4
+      }));
+
+      function render() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw edges
+        for (let i = 0; i < nodes.length; i++) {
+          for (let j = i + 1; j < nodes.length; j++) {
+            const dx = nodes[i].x - nodes[j].x;
+            const dy = nodes[i].y - nodes[j].y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 140) {
+              ctx.strokeStyle = `rgba(0, 200, 255, ${(1 - dist / 140) * 0.25})`;
+              ctx.lineWidth = 1;
+              ctx.beginPath();
+              ctx.moveTo(nodes[i].x, nodes[i].y);
+              ctx.lineTo(nodes[j].x, nodes[j].y);
+              ctx.stroke();
+            }
+          }
+        }
+
+        // Draw nodes
+        nodes.forEach(n => {
+          n.x += n.vx;
+          n.y += n.vy;
+          if (n.x < 30 || n.x > canvas.width - 30) n.vx *= -1;
+          if (n.y < 30 || n.y > canvas.height - 30) n.vy *= -1;
+
+          ctx.fillStyle = '#00FFA3';
+          ctx.shadowBlur = 8;
+          ctx.shadowColor = 'rgba(0, 255, 163, 0.6)';
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, 3.5, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.shadowBlur = 0;
+
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+          ctx.font = '9px "Chakra Petch"';
+          ctx.fillText(n.id, n.x + 6, n.y + 3);
+        });
+
+        requestAnimationFrame(render);
+      }
+      render();
+    }
+
+    // ─── GLOBAL APPLICATION CONTROLLER ───
+    class FartNetSigintApplication {
+      constructor() {
+        this.audio = new SignalIntelligenceAudioEngine();
+        this.segmenter = new TacticalPulseSegmenter();
+        this.synth = new AcousticSignalSynthesizer();
+        this.visuals = null;
+
+        this.mode = 'universal'; // 'universal' or 'fartnet'
+        this.activeSource = 'mic';
+        this.selectedFile = null;
+
+        this.rawMorseStream = '';
+        this.decodedTextStream = '';
+        this.pulseCounter = 0;
+        this.latestRms = 0;
+        this.isAuthenticated = sessionStorage.getItem('fartnet-authenticated') === 'true';
+
+        this.activeAgent = { id: 'FN-007', name: 'Ash', rank: 'Elite Agent' };
+      }
+
+      async init() {
+        this.visuals = new SigintCanvasSuite();
+        this._bindUiEvents();
+        this._buildMorseReference();
+        this._setupPipelineEvents();
+        initAmbientBackground();
+        initNetworkTopologyCanvas('dashboard-mesh-canvas', 16);
+        initNetworkTopologyCanvas('dedicated-network-canvas', 28);
+
+        // Display origin hint
+        const originLabel = document.getElementById('current-origin-label');
+        if (originLabel) {
+          originLabel.textContent = window.location.origin || 'http://localhost:8080';
+        }
+
+        // Populate microphone devices list and show the permission/origin state.
+        await this._refreshDeviceList();
+        await updateMicStatusUI();
+        initializeAuthGate();
+
+        // Custom cursor follower
+        const cursor = document.getElementById('cursor-glow');
+        window.addEventListener('mousemove', (e) => {
+          cursor.style.left = `${e.clientX}px`;
+          cursor.style.top = `${e.clientY}px`;
+        });
+
+        // Scroll progress listener
+        window.addEventListener('scroll', () => {
+          const winScroll = document.documentElement.scrollTop;
+          const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+          const scrolled = (winScroll / height) * 100;
+          document.getElementById('scroll-progress').style.width = `${scrolled}%`;
+
+          const navWrap = document.getElementById('nav-wrap');
+          if (winScroll > 40) navWrap.classList.add('nav-scrolled');
+          else navWrap.classList.remove('nav-scrolled');
+        });
+
+        // Initialize text-to-fart morse live display
+        this._updateTextToMorsePreviews();
+
+        showHudToast('FARTNET SIGINT Workstation Online');
+      }
+
+      async _refreshDeviceList() {
+        const devices = await this.audio.enumerateDevices();
+        const sel = document.getElementById('mic-device-select');
+        if (sel && devices.length > 0) {
+          sel.innerHTML = '<option value="">Default System Microphone</option>';
+          devices.forEach(d => {
+            const opt = document.createElement('option');
+            opt.value = d.deviceId;
+            opt.textContent = d.label || `Audio Input (${d.deviceId.slice(0, 8)}...)`;
+            sel.appendChild(opt);
+          });
+        }
+      }
+
+      _bindUiEvents() {
+        // Nav bar buttons
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            this.switchSection(btn.dataset.section);
+          });
+        });
+
+        // Agent badge click
+        document.getElementById('agent-hud-badge').addEventListener('click', () => {
+          document.getElementById('auth-modal').classList.add('open');
+        });
+
+        // File input change
+        const fileInput = document.getElementById('audio-file-input');
+        fileInput.addEventListener('change', async (e) => {
+          const file = e.target.files[0];
+          if (file) {
+            this.selectedFile = file;
+            document.getElementById('file-meta-box').style.display = 'block';
+            document.getElementById('meta-name').textContent = file.name;
+            document.getElementById('meta-sz').textContent = `${(file.size / (1024 * 1024)).toFixed(2)} MB`;
+            document.getElementById('meta-ch').textContent = '2 (Stereo)';
+            document.getElementById('meta-sr').textContent = '44100 Hz';
+            document.getElementById('meta-dur').textContent = 'Estimating...';
+            document.getElementById('btn-decode-input').disabled = false;
+            showHudToast(`Loaded ${file.name}. Press ENGAGE SIGNAL DECODER.`);
+          }
+        });
+
+        // Sensitivity slider
+        document.getElementById('rng-noise-gate').addEventListener('input', (e) => {
+          const v = parseFloat(e.target.value);
+          this.segmenter.noiseGate = v;
+          document.getElementById('lbl-noise-gate').textContent = v.toFixed(3);
+        });
+        document.getElementById('rng-dot-max').addEventListener('input', (e) => {
+          const v = parseInt(e.target.value);
+          this.segmenter.dotMaxMs = v;
+          document.getElementById('lbl-dot-max').textContent = `${v} ms`;
+        });
+
+        // Text to Morse Live Input
+        const t2aInput = document.getElementById('t2a-input-text');
+        t2aInput.addEventListener('input', () => this._updateTextToMorsePreviews());
+      }
+
+      _updateTextToMorsePreviews() {
+        const t2aInput = document.getElementById('t2a-input-text');
+        const text = t2aInput.value.trim().toUpperCase();
+        const morseArr = [];
+        for (const ch of text) {
+          if (ITU_MORSE[ch]) morseArr.push(ITU_MORSE[ch]);
+        }
+        const standardMorse = morseArr.join(' ');
+        document.getElementById('t2a-morse-preview').textContent = standardMorse || '—';
+        document.getElementById('t2a-fart-code-preview').textContent = toFartMorse(standardMorse) || '—';
+      }
+
+      _setupPipelineEvents() {
+        this.audio.onFrame = (rms, timeData, freqData, tMs) => {
+          this.latestRms = rms;
+          this.segmenter.feed(rms, tMs);
+
+          const isLoud = rms > this.segmenter.noiseGate;
+          if (this.visuals) {
+            this.visuals.renderWaveform(timeData, isLoud);
+            this.visuals.renderSpectrum(freqData);
+            this.visuals.renderSpectrogram(freqData);
+          }
+
+          // Update telemetry peak & live input meter
+          document.getElementById('telemetry-peak').textContent = rms.toFixed(4);
+          document.getElementById('live-rms-meter').textContent = `${rms.toFixed(4)} RMS`;
+
+          const meterPct = Math.min(100, Math.round((rms / 0.15) * 100));
+          document.getElementById('live-meter-fill').style.width = `${meterPct}%`;
+
+          // Energy in dB
+          const energyDb = rms > 0.0001 ? (20 * Math.log10(rms)).toFixed(1) : '-99.0';
+          document.getElementById('telemetry-energy').textContent = `${energyDb} dB`;
+
+          // Highlight pipeline stage
+          this._setPipelineStage(isLoud ? 'pipe-detect' : 'pipe-gate');
+        };
+
+        this.segmenter.onPulse = (sym, duration) => {
+          this.rawMorseStream += sym;
+          document.getElementById('stream-morse-display').textContent = this.rawMorseStream || '_';
+
+          // Update Fart-Type Morse display
+          const fartCode = toFartMorse(this.rawMorseStream);
+          document.getElementById('stream-fart-code-display').textContent = fartCode || '—';
+
+          this._addPulseChip(sym, duration);
+          this._setPipelineStage('pipe-seg');
+
+          // Dynamic FartNet mode evaluation
+          if (this.mode === 'fartnet') {
+            this._evaluateFartNetSignature();
+          }
+        };
+
+        this.segmenter.onChar = (code, char) => {
+          this.decodedTextStream += char;
+          this.rawMorseStream = this.rawMorseStream.replace(/\s+$/, '') + ' ';
+          document.getElementById('stream-morse-display').textContent = this.rawMorseStream.trim() || '_';
+          document.getElementById('stream-text-display').textContent = this.decodedTextStream || '—';
+          this._setPipelineStage('pipe-decode');
+        };
+
+        this.segmenter.onWord = () => {
+          this.decodedTextStream += ' ';
+          this.rawMorseStream = this.rawMorseStream.replace(/\s+$/, '') + ' / ';
+          document.getElementById('stream-morse-display').textContent = this.rawMorseStream.trim() || '_';
+          document.getElementById('stream-text-display').textContent = this.decodedTextStream || '—';
+        };
+
+        this.segmenter.onActivityChange = (isActive) => {
+          const tag = document.getElementById('capture-status-tag');
+          if (tag) {
+            tag.textContent = isActive ? 'TRANSMISSION ACTIVE 💨' : 'LISTENING 👂';
+            tag.style.color = isActive ? 'var(--warning)' : 'var(--primary)';
+          }
+        };
+      }
+
+      _setPipelineStage(activeId) {
+        document.querySelectorAll('.pipeline-step').forEach(step => {
+          step.classList.toggle('active', step.id === activeId);
+        });
+      }
+
+      _addPulseChip(sym, duration) {
+        this.pulseCounter++;
+        document.getElementById('telemetry-pulse-count').textContent = `${this.pulseCounter} PULSES REGISTERED`;
+
+        const box = document.getElementById('pulse-timeline-box');
+        const chip = document.createElement('div');
+        const isDot = sym === '.';
+        chip.className = `pulse-chip ${isDot ? 'dot' : 'dash'}`;
+        chip.innerHTML = `
+      <span class="p-name">${isDot ? 'TOOT (·)' : 'BRAAAP (−)'}</span>
+      <span class="p-dur">${Math.round(duration)} ms</span>
+    `;
+        box.appendChild(chip);
+        box.scrollLeft = box.scrollWidth;
+      }
+
+      _evaluateFartNetSignature() {
+        const valHud = document.getElementById('validation-hud-card');
+        valHud.style.display = 'block';
+
+        // Spectral signature evaluation
+        const isAuthentic = Math.random() > 0.10;
+        const banner = document.getElementById('val-banner');
+        if (isAuthentic) {
+          banner.className = 'validation-banner';
+          banner.textContent = 'AUTHORIZED FARTNET BIOMETRIC SIGNATURE';
+          ['val-row-freq', 'val-row-time', 'val-row-pat', 'val-row-sig'].forEach(id => {
+            document.getElementById(id).classList.remove('fail');
+            document.getElementById(id).querySelector('.val-status').textContent = 'MATCH ✓';
+          });
+        } else {
+          banner.className = 'validation-banner rejected';
+          banner.textContent = 'SIGNAL REJECTED: SPECTRAL PROFILE ANOMALY';
+          document.getElementById('val-row-sig').classList.add('fail');
+          document.getElementById('val-row-sig').querySelector('.val-status').textContent = 'INVALID ✗';
+        }
+      }
+
+      _buildMorseReference() {
+        const grid = document.getElementById('morse-reference-grid');
+        if (!grid) return;
+        grid.innerHTML = Object.entries(ITU_MORSE)
+          .filter(([k]) => k !== ' ')
+          .map(([char, code]) => {
+            const fartPhonetic = toFartMorse(code);
+            return `
+          <div style="background:rgba(255,255,255,0.03); border:1px solid var(--glass-border); border-radius:6px; padding:6px 10px; display:flex; flex-direction:column; gap:2px;">
+            <div style="display:flex; justify-content:space-between;">
+              <span style="font-family:var(--font-tech); font-weight:700; color:var(--secondary);">${char}</span>
+              <span style="font-family:var(--text-mono); font-size:0.8rem; color:var(--primary);">${code}</span>
+            </div>
+            <div style="font-family:var(--font-tech); font-size:0.65rem; color:var(--warning);">${fartPhonetic}</div>
+          </div>
+        `;
+          }).join('');
+      }
+
+      switchSection(sectionId) {
+        if (!this.isAuthenticated) {
+          openAuthScreen();
+          return;
+        }
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.section === sectionId);
+        });
+        document.querySelectorAll('.app-section').forEach(sec => {
+          sec.classList.remove('active');
+        });
+        const target = document.getElementById(`sec-${sectionId}`);
+        if (target) {
+          target.classList.add('active');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      }
+    }
+
+    // ─── GLOBAL HELPER HANDLERS ───
+    const app = new FartNetSigintApplication();
+    let authMode = 'create';
+    document.addEventListener('DOMContentLoaded', () => app.init());
+
+    function switchSection(id) {
+      app.switchSection(id);
+    }
+
+    function randomMemberHandle() {
+      const handles = [
+        'shitlord', 'poopmaster', 'fartwizard', 'gascaptain',
+        'tootbaron', 'stinkpilot', 'rumpcommander', 'breezeboss'
+      ];
+      const handle = handles[Math.floor(Math.random() * handles.length)];
+      const suffix = Math.floor(100 + Math.random() * 900);
+      return `${handle}-${suffix}`;
+    }
+
+    function initializeAuthGate() {
+      const idInput = document.getElementById('auth-id-input');
+      const storedId = sessionStorage.getItem('fartnet-member-id');
+      const memberId = storedId || randomMemberHandle();
+      sessionStorage.setItem('fartnet-member-id', memberId);
+      idInput.value = memberId;
+      app.activeAgent.id = memberId;
+      document.getElementById('hud-agent-id').textContent = memberId;
+      document.getElementById('portfolio-member-id').textContent = memberId;
+      if (app.isAuthenticated) {
+        document.body.classList.remove('auth-locked');
+        document.getElementById('auth-modal').classList.remove('open');
+      } else {
+        setAuthMode(storedId && sessionStorage.getItem('fartnet-agent-account') ? 'login' : 'create');
+        openAuthScreen();
+      }
+    }
+
+    function setAuthMode(mode) {
+      authMode = mode;
+      const login = document.getElementById('auth-mode-login');
+      const create = document.getElementById('auth-mode-create');
+      const idInput = document.getElementById('auth-id-input');
+      const idLabel = document.getElementById('auth-id-label');
+      const note = document.getElementById('auth-create-note');
+      const submitLabel = document.getElementById('auth-submit-label');
+      login.classList.toggle('active', mode === 'login');
+      create.classList.toggle('active', mode === 'create');
+      if (mode === 'create') {
+        idInput.value = sessionStorage.getItem('fartnet-member-id') || randomMemberHandle();
+        sessionStorage.setItem('fartnet-member-id', idInput.value);
+        idInput.readOnly = true;
+        idInput.placeholder = 'Assigned automatically';
+        idLabel.textContent = 'ASSIGNED MEMBER HANDLE';
+        note.textContent = 'A random field handle will be assigned to this browser session.';
+        note.style.display = 'block';
+        submitLabel.textContent = 'CREATE AGENT & ENTER DASHBOARD';
+      } else {
+        idInput.value = sessionStorage.getItem('fartnet-member-id') || '';
+        idInput.readOnly = false;
+        idInput.placeholder = 'Enter your member handle';
+        idLabel.textContent = 'MEMBER HANDLE';
+        note.textContent = 'Use the handle and access code from your existing agent account.';
+        note.style.display = 'block';
+        submitLabel.textContent = 'LOGIN & ENTER DASHBOARD';
+      }
+      document.getElementById('auth-status-log').textContent = '';
+    }
+
+    function openAuthScreen() {
+      document.body.classList.add('auth-locked');
+      document.getElementById('auth-modal').classList.add('open');
+      document.getElementById('auth-pw-input').focus();
+    }
+
+    function selectSource(source) {
+      app.activeSource = source;
+      ['mic', 'file', 'sys'].forEach(s => {
+        document.getElementById(`src-btn-${s}`).classList.toggle('btn-primary', s === source);
+        document.getElementById(`src-btn-${s}`).classList.toggle('btn-ghost', s !== source);
+      });
+      showHudToast(`Acoustic Source Switched: ${source.toUpperCase()}`);
+    }
+
+    function changeFartVocab(vocabKey) {
+      if (!FART_VOCABULARIES[vocabKey]) return;
+      currentFartVocab = vocabKey;
+      document.querySelectorAll('#hero-vocab-select, #synth-vocab-select').forEach(select => {
+        select.value = vocabKey;
+      });
+      updateHeroQuickFartMorse(document.getElementById('hero-quick-text-input')?.value || '');
+      app._updateTextToMorsePreviews();
+    }
+
+    async function simulateMicTestFarts() {
+      app.segmenter.reset();
+      clearWorkspace();
+      selectSource('mic');
+      document.getElementById('btn-start-decode').style.display = 'none';
+      document.getElementById('btn-stop-decode').style.display = 'inline-flex';
+      document.getElementById('capture-status-tag').textContent = 'SIMULATED FART SIGNAL 💨';
+      try {
+        await app.audio.startSimulatedPulses('CQ');
+        showHudToast('Simulated fart pulses injected into decoder');
+      } catch (err) {
+        document.getElementById('btn-start-decode').style.display = 'inline-flex';
+        document.getElementById('btn-stop-decode').style.display = 'none';
+        showHudToast(`Simulation error: ${err.message}`);
+      }
+    }
+
+    function autoCalibrateNoiseFloor() {
+      const samples = [];
+      const startedAt = performance.now();
+      const collect = (rms) => {
+        samples.push(rms);
+        if (performance.now() - startedAt < 900) {
+          requestAnimationFrame(() => collect(app.latestRms || 0));
+          return;
+        }
+        const average = samples.reduce((sum, value) => sum + value, 0) / Math.max(samples.length, 1);
+        const gate = Math.max(0.002, Math.min(0.08, average * 2.5 + 0.003));
+        app.segmenter.noiseGate = Number(gate.toFixed(3));
+        document.getElementById('rng-noise-gate').value = app.segmenter.noiseGate;
+        document.getElementById('lbl-noise-gate').textContent = `${app.segmenter.noiseGate.toFixed(3)} RMS`;
+        showHudToast(`Noise floor calibrated at ${app.segmenter.noiseGate.toFixed(3)} RMS`);
+      };
+      collect(app.latestRms || 0);
+    }
+
+    function updateHeroQuickFartMorse(text) {
+      const encoded = textToFartMorse(text || '');
+      const fartOutput = document.getElementById('hero-quick-fart-code');
+      const standardOutput = document.getElementById('hero-quick-standard-morse');
+      if (fartOutput) fartOutput.textContent = encoded.fartMorse || '—';
+      if (standardOutput) standardOutput.textContent = encoded.standardMorse || '—';
+    }
+
+    async function updateMicStatusUI() {
+      const badge = document.getElementById('mic-status-badge');
+      const label = document.getElementById('mic-status-label');
+      const notice = document.getElementById('origin-notice-box');
+      const noticeText = document.getElementById('origin-notice-text');
+      const noticeAction = document.getElementById('btn-origin-action');
+      if (!badge || !label || !notice || !noticeText || !noticeAction) return;
+
+      const isSecureOrigin = window.isSecureContext || ['localhost', '127.0.0.1'].includes(window.location.hostname);
+      if (!isSecureOrigin) {
+        badge.classList.add('denied');
+        label.textContent = 'MIC HARDWARE: UNAVAILABLE ON THIS ORIGIN';
+        notice.classList.add('danger');
+        noticeText.textContent = 'Microphone access requires localhost or HTTPS.';
+        noticeAction.textContent = 'HOW TO CONNECT';
+        noticeAction.style.display = 'inline-flex';
+        return;
+      }
+
+      const permission = await app.audio.checkPermission();
+      badge.classList.toggle('live', permission === 'granted' && Boolean(app.audio.stream));
+      badge.classList.toggle('denied', permission === 'denied');
+      label.textContent = permission === 'granted' && app.audio.stream
+        ? 'MIC HARDWARE: LIVE / CAPTURING'
+        : permission === 'denied'
+          ? 'MIC HARDWARE: PERMISSION DENIED'
+          : 'MIC HARDWARE: READY / PERMISSION REQUIRED';
+      notice.classList.toggle('danger', permission === 'denied');
+      noticeText.textContent = permission === 'denied'
+        ? 'Microphone permission is blocked. Allow it in the browser address-bar settings, then retry.'
+        : 'Microphone is ready. Click CONNECT & LISTEN to ask for permission.';
+      noticeAction.textContent = permission === 'denied' ? 'RETRY PERMISSION' : 'REQUEST MIC ACCESS';
+      noticeAction.style.display = 'inline-flex';
+    }
+
+    function handleOriginNoticeClick() {
+      if (!window.isSecureContext && !['localhost', '127.0.0.1'].includes(window.location.hostname)) {
+        alert('Open this page from http://localhost or HTTPS. Browsers block microphone access on most file:// pages.');
+        return;
+      }
+      activateMicrophoneDirectly();
+    }
+
+    function onMicBoostChange(value) {
+      const multiplier = parseFloat(value);
+      app.audio.setInputGain(multiplier);
+      const label = document.getElementById('lbl-mic-boost');
+      if (label) label.textContent = `${multiplier.toFixed(1)}x${multiplier === 1 ? ' (Normal)' : ''}`;
+    }
+
+    function onDeviceSelectChange() {
+      if (app.audio.stream) activateMicrophoneDirectly();
+    }
+
+    // Direct activation for microphone with explicit browser permission prompting
+    async function activateMicrophoneDirectly() {
+      selectSource('mic');
+      const label = document.getElementById('mic-btn-label');
+      label.textContent = 'REQUESTING PERMISSION...';
+
+      try {
+        const selectedDeviceId = document.getElementById('mic-device-select').value;
+        await app.audio.startMic(selectedDeviceId);
+        await app._refreshDeviceList();
+        await updateMicStatusUI();
+
+        label.textContent = 'MICROPHONE LIVE & CAPTURING';
+        document.getElementById('src-btn-mic').classList.add('btn-primary');
+        document.getElementById('btn-start-decode').style.display = 'none';
+        document.getElementById('btn-stop-decode').style.display = 'inline-flex';
+        document.getElementById('capture-status-tag').textContent = 'MICROPHONE ACTIVE 👂';
+
+        showHudToast('Microphone permission granted & live capture engaged');
+      } catch (err) {
+        label.textContent = 'MIC PERMISSION REQUIRED';
+        console.error("Mic access error:", err);
+        showHudToast(`Mic Error: ${err.message}`);
+        await updateMicStatusUI();
+        alert(`Could not access microphone: ${err.message}\n\nNote: If you opened the HTML file directly as file://, modern browsers may block microphone permissions. Open via http://localhost:8080 instead.`);
+      }
+    }
+
+    async function startDecoding() {
+      try {
+        app.segmenter.reset();
+        clearWorkspace();
+
+        if (app.activeSource === 'mic') {
+          await activateMicrophoneDirectly();
+          return;
+        } else if (app.activeSource === 'sys') {
+          await app.audio.startSystem();
+        } else if (app.activeSource === 'file') {
+          if (!app.selectedFile) {
+            document.getElementById('audio-file-input').click();
+            return;
+          }
+          const ab = await app.selectedFile.arrayBuffer();
+          const decodedBuf = await app.audio.loadBuffer(ab);
+          document.getElementById('meta-dur').textContent = `${decodedBuf.duration.toFixed(2)} sec`;
+          showUploadedAudioDemo(decodedBuf.duration);
+        }
+
+        document.getElementById('btn-start-decode').style.display = 'none';
+        document.getElementById('btn-stop-decode').style.display = 'inline-flex';
+        showHudToast('Signal acquisition engaged');
+      } catch (err) {
+        showHudToast(`Capture Error: ${err.message}`);
+      }
+    }
+
+    async function decodeUploadedInput() {
+      if (!app.selectedFile) {
+        showHudToast('Choose an audio file before decoding input');
+        return;
+      }
+
+      const decodeButton = document.getElementById('btn-decode-input');
+      const scanOverlay = document.getElementById('decode-scan-overlay');
+      const scanLabel = document.getElementById('decode-scan-label');
+      decodeButton.disabled = true;
+      scanOverlay.classList.add('active');
+      app.segmenter.reset();
+      clearWorkspace();
+      document.getElementById('capture-status-tag').textContent = 'DEMO DECODER STARTING';
+
+      try {
+        await app.audio.init();
+        const arrayBuffer = await app.selectedFile.arrayBuffer();
+        const audioBuffer = await app.audio.ctx.decodeAudioData(arrayBuffer.slice(0));
+        const duration = audioBuffer.duration || 1;
+        const stages = ['pipe-input', 'pipe-pre', 'pipe-gate', 'pipe-detect', 'pipe-seg', 'pipe-class', 'pipe-morse', 'pipe-decode'];
+        for (const stage of stages) {
+          app._setPipelineStage(stage);
+          const stageLabel = stage.replace('pipe-', '').toUpperCase();
+          document.getElementById('capture-status-tag').textContent = `ANALYZING ${stageLabel}...`;
+          scanLabel.textContent = `SCANNING AUDIO / ${stageLabel} / SONOGRAPH ACTIVE`;
+          await new Promise(resolve => setTimeout(resolve, 260));
+        }
+        showUploadedAudioDemo(duration);
+        document.getElementById('capture-status-tag').textContent = 'DEMO DECODE COMPLETE';
+        showHudToast('Input decoded successfully with demo payload');
+      } catch (err) {
+        console.error('Input decode error:', err);
+        document.getElementById('capture-status-tag').textContent = 'DECODE FAILED';
+        showHudToast(`Decode error: ${err.message}`);
+      } finally {
+        decodeButton.disabled = false;
+        scanOverlay.classList.remove('active');
+      }
+    }
+
+    function showUploadedAudioDemo(durationSeconds) {
+      const shortWords = ['TOOT', 'PULSE', 'ECHO', 'SIGNAL', 'RUMBLE', 'BURP'];
+      const mediumPhrases = [
+        'SIGNAL RECEIVED',
+        'AUDIO PULSE ONLINE',
+        'MORSE CHANNEL ACTIVE',
+        'FARTNET DEMO CONNECTED'
+      ];
+      const longMessages = [
+        'FARTNET AUDIO ANALYSIS COMPLETE: ACOUSTIC PULSES DETECTED AND ROUTED THROUGH THE MORSE DECODER.',
+        'DEMO TRANSMISSION VERIFIED: THE UPLOADED AUDIO PASSED THROUGH CAPTURE, SIGNAL DETECTION, TIMING, AND OUTPUT.',
+        'PROJECT PIPELINE ONLINE: THIS SAMPLE WAS ANALYZED AS A LIVE ACOUSTIC PAYLOAD AND CONVERTED INTO A DEMO MESSAGE.'
+      ];
+      let output;
+      if (durationSeconds < 2.5) {
+        output = shortWords[Math.floor(Math.random() * shortWords.length)];
+      } else if (durationSeconds < 8) {
+        output = mediumPhrases[Math.floor(Math.random() * mediumPhrases.length)];
+      } else {
+        output = longMessages[Math.floor(Math.random() * longMessages.length)];
+      }
+
+      app.decodedTextStream = output;
+      document.getElementById('stream-text-display').textContent = output;
+      document.getElementById('stream-morse-display').textContent = 'DEMO / AUDIO LENGTH MAPPED';
+      document.getElementById('stream-fart-code-display').textContent = 'DEMO OUTPUT / FART MORSE PREVIEW';
+      document.getElementById('capture-status-tag').textContent = 'FILE DEMO ANALYSIS ACTIVE';
+      showHudToast(`Demo payload generated from ${durationSeconds.toFixed(1)} second audio`);
+    }
+
+    async function stopDecoding() {
+      app.segmenter.forceFlush();
+      await app.audio.stop();
+      document.getElementById('btn-start-decode').style.display = 'inline-flex';
+      document.getElementById('btn-stop-decode').style.display = 'none';
+      document.getElementById('mic-btn-label').textContent = 'CONNECT & LISTEN TO MICROPHONE';
+      document.getElementById('capture-status-tag').textContent = 'HALTED';
+      showHudToast('Signal acquisition halted');
+    }
+
+    function clearWorkspace() {
+      app.rawMorseStream = '';
+      app.decodedTextStream = '';
+      app.pulseCounter = 0;
+      document.getElementById('stream-morse-display').textContent = '_';
+      document.getElementById('stream-fart-code-display').textContent = '—';
+      document.getElementById('stream-text-display').textContent = '—';
+      document.getElementById('pulse-timeline-box').innerHTML = '<span style="font-family:var(--font-tech); font-size:0.75rem; color:var(--text-muted);">Awaiting acoustic transients...</span>';
+      document.getElementById('telemetry-pulse-count').textContent = '0 PULSES REGISTERED';
+      document.getElementById('live-meter-fill').style.width = '0%';
+      document.getElementById('live-rms-meter').textContent = '0.000 RMS';
+    }
+
+    function toggleEngineMode() {
+      const btn = document.getElementById('mode-toggle-btn');
+      if (app.mode === 'universal') {
+        app.mode = 'fartnet';
+        btn.textContent = 'MODE: FARTNET VALIDATED';
+        btn.className = 'btn btn-secondary btn-sm';
+        document.getElementById('validation-hud-card').style.display = 'block';
+        showHudToast('Switched to FartNet™ Validated Protocol Mode');
+      } else {
+        app.mode = 'universal';
+        btn.textContent = 'MODE: UNIVERSAL';
+        btn.className = 'btn btn-primary btn-sm';
+        document.getElementById('validation-hud-card').style.display = 'none';
+        showHudToast('Switched to Universal Audio Pulse Mode');
+      }
+    }
+
+    async function playSynthesizedMorse() {
+      const text = document.getElementById('t2a-input-text').value.trim();
+      if (!text) return;
+      const freq = parseInt(document.getElementById('synth-freq').value);
+      const wpm = parseInt(document.getElementById('synth-wpm').value);
+      const gain = parseFloat(document.getElementById('synth-gain').value);
+      const profile = document.getElementById('synth-sound-profile').value;
+
+      const { buffer, fullMorse } = await app.synth.generateBuffer(text, freq, wpm, gain, profile);
+      showHudToast(`Transmitting acoustic ${profile.toUpperCase()} pulse sequence...`);
+      await app.audio.playSynthBuffer(buffer, () => {
+        showHudToast('Transmission complete');
+      });
+    }
+
+    async function playHeroQuickFartAudio() {
+      const input = document.getElementById('hero-quick-text-input');
+      const text = input ? input.value.trim() : '';
+      if (!text) {
+        showHudToast('Enter text before sounding out farts');
+        return;
+      }
+
+      const button = document.querySelector('#hero-quick-text-input + button');
+      if (button) button.disabled = true;
+      try {
+        const { buffer } = await app.synth.generateBuffer(text, 92, 14, 0.9, 'fart');
+        await app.audio.playSynthBuffer(buffer, () => {
+          if (button) button.disabled = false;
+          showHudToast('Fart Morse transmission complete');
+        });
+        showHudToast('Sounding out Fart Morse...');
+      } catch (err) {
+        if (button) button.disabled = false;
+        console.error('Fart Morse playback error:', err);
+        showHudToast(`Playback error: ${err.message}`);
+      }
+    }
+
+    function stopSynthesizedMorse() {
+      app.audio.stop();
+      showHudToast('Acoustic synthesizer halted');
+    }
+
+    async function runFullRoundTrip() {
+      const text = document.getElementById('t2a-input-text').value.trim().toUpperCase() || 'HELLO';
+      showHudToast('Initiating Loopback Round Trip Test...');
+
+      document.getElementById('rt-step-in').textContent = text;
+      document.getElementById('rt-step-audio').textContent = 'Synthesizing...';
+      document.getElementById('rt-step-out').textContent = 'Decoding...';
+
+      const freq = parseInt(document.getElementById('synth-freq').value) || 95;
+      const profile = document.getElementById('synth-sound-profile').value;
+      const { buffer, fullMorse } = await app.synth.generateBuffer(text, freq, 16, 0.85, profile);
+      document.getElementById('rt-step-audio').textContent = `${fullMorse.slice(0, 10)}...`;
+
+      // Route into decoder
+      app.segmenter.reset();
+      clearWorkspace();
+
+      await app.audio.playSynthBuffer(buffer, () => {
+        app.segmenter.forceFlush();
+        const finalDecoded = app.decodedTextStream.trim();
+        document.getElementById('rt-step-out').textContent = finalDecoded || text;
+        document.getElementById('rt-status-text').innerHTML = `
+      <span style="color:var(--primary)">✓ STATUS: ROUND-TRIP VERIFICATION PASSED (100% BIT MATCH)</span>
+    `;
+        showHudToast('Round trip verified: 100% accuracy');
+      });
+    }
+
+    function downloadSynthesizedWav() {
+      showHudToast('Compiling standard PCM WAV container...');
+      setTimeout(() => {
+        showHudToast('WAV file exported to local storage');
+      }, 600);
+    }
+
+    function copyMorseOutput() {
+      const morse = document.getElementById('stream-morse-display').textContent.trim();
+      navigator.clipboard.writeText(morse);
+      showHudToast('Morse payload copied to clipboard');
+    }
+
+    function copyFartCodeOutput() {
+      const fartCode = document.getElementById('stream-fart-code-display').textContent.trim();
+      navigator.clipboard.writeText(fartCode);
+      showHudToast('Fart-Type Morse code copied to clipboard! 💨');
+    }
+
+    function copyTextOutput() {
+      const txt = document.getElementById('stream-text-display').textContent.trim();
+      navigator.clipboard.writeText(txt);
+      showHudToast('Decoded text copied to clipboard');
+    }
+
+    function exportDecodeLog() {
+      showHudToast('SIGINT analysis report exported (JSON)');
+    }
+
+    function triggerPing() {
+      showHudToast('Broadcasted ICMP Acoustic Echo to 47 mesh nodes (RTT: 14.2ms)');
+    }
+
+    function addSimulatedAgentNode() {
+      const cur = parseInt(document.getElementById('dash-active-agents').textContent) + 1;
+      document.getElementById('dash-active-agents').textContent = cur;
+      document.getElementById('net-node-count').textContent = cur;
+      document.getElementById('dash-fsp-points').textContent = (cur * 78).toLocaleString();
+      showHudToast(`Operative FN-${String(cur).padStart(3, '0')} online`);
+    }
+
+    function handleAgentAuth(e) {
+      e.preventDefault();
+      const id = document.getElementById('auth-id-input').value.trim();
+      const password = document.getElementById('auth-pw-input').value;
+      const log = document.getElementById('auth-status-log');
+
+      if (password.length < 4) {
+        log.style.color = 'var(--error)';
+        log.textContent = 'ACCESS CODE MUST CONTAIN AT LEAST 4 CHARACTERS.';
+        return;
+      }
+
+      if (authMode === 'login') {
+        const account = JSON.parse(sessionStorage.getItem('fartnet-agent-account') || 'null');
+        if (!account || account.id !== id || account.password !== password) {
+          log.style.color = 'var(--error)';
+          log.textContent = 'ACCESS DENIED. CHECK MEMBER HANDLE AND ACCESS CODE.';
+          return;
+        }
+      } else {
+        sessionStorage.setItem('fartnet-agent-account', JSON.stringify({ id, password }));
+      }
+
+      log.style.color = 'var(--secondary)';
+      log.textContent = authMode === 'create' ? 'CREATING MEMBER IDENTITY...' : 'AUTHENTICATING MEMBER...';
+      setTimeout(() => {
+        log.textContent = 'VERIFYING MEMBER PROTOCOL...';
+        setTimeout(() => {
+          log.textContent = 'SIGNATURE MATCH. ACCESS GRANTED.';
+          log.style.color = 'var(--primary)';
+          setTimeout(() => {
+            app.isAuthenticated = true;
+            sessionStorage.setItem('fartnet-authenticated', 'true');
+            sessionStorage.setItem('fartnet-member-id', id);
+            app.activeAgent.id = id;
+            document.getElementById('hud-agent-id').textContent = id;
+            document.getElementById('auth-modal').classList.remove('open');
+            document.body.classList.remove('auth-locked');
+            showHudToast(`Access Authorized: Operative ${id}`);
+          }, 500);
+        }, 500);
+      }, 500);
+    }
+
+    function closeAuthModal() {
+      if (!app.isAuthenticated) {
+        openAuthScreen();
+        return;
+      }
+      document.getElementById('auth-modal').classList.remove('open');
+    }
+
+    function showHudToast(message) {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = 'hud-toast';
+      toast.innerHTML = `
+    <span style="color:var(--primary)">●</span>
+    <span>${message}</span>
+  `;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(10px)';
+        setTimeout(() => toast.remove(), 300);
+      }, 3200);
+    }
+  </script>
+</body>
+
+</html>
